@@ -4,11 +4,15 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        PinImpl.cpp \
+        Pump.cpp \
         Timer.cpp \
-        TimerHelpers.cpp \
+        TimerImpl.cpp \
         main.cpp
 
 HEADERS += \
     Common.h \
+    PinImpl.h \
+    Pump.h \
     Timer.h \
-    TimerHelpers.h
+    TimerImpl.h

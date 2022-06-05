@@ -1,4 +1,4 @@
-#include "MockTimerHelpers.h"
+#include "MockTimerImpl.h"
 
 namespace {
 
@@ -6,7 +6,7 @@ uint32_t mockTime{};
 
 } // namespace
 
-void MockTimerHelpers::setTime(uint32_t time)
+void MockTimerImpl::setTime(uint32_t time)
 {
     mockTime = time;
 }

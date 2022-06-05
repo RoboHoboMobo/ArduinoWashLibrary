@@ -2,7 +2,7 @@
 
 #include "Timer.h"
 
-#include "MockTimerHelpers.h"
+#include "MockTimerImpl.h"
 
 class TestTimer : public QObject
 {
@@ -64,7 +64,7 @@ void TestTimer::startIfStoppedAndHasRemain()
     QVERIFY(t.getState() == Timer::State::Stopped);
     QCOMPARE(t.getRemainingTime(), 123);
 
-    MockTimerHelpers::setTime(1000);
+    MockTimerImpl::setTime(1000);
 
     t.start();
 
@@ -248,7 +248,7 @@ void TestTimer::updateIfStopped()
 {
     Timer t(123);
 
-    MockTimerHelpers::setTime(1000);
+    MockTimerImpl::setTime(1000);
     t.update();
 
     QVERIFY(t.getState() == Timer::State::Stopped);
@@ -259,13 +259,13 @@ void TestTimer::updateIfRunningAndHasRemain()
 {
     Timer t(123);
 
-    MockTimerHelpers::setTime(1000);
+    MockTimerImpl::setTime(1000);
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
     QCOMPARE(t.getRemainingTime(), 123);
 
-    MockTimerHelpers::setTime(1122);
+    MockTimerImpl::setTime(1122);
     t.update();
 
     QVERIFY(t.getState() == Timer::State::Running);
@@ -276,13 +276,13 @@ void TestTimer::updateIfRunningWithoutRemain()
 {
     Timer t(123);
 
-    MockTimerHelpers::setTime(1000);
+    MockTimerImpl::setTime(1000);
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
     QCOMPARE(t.getRemainingTime(), 123);
 
-    MockTimerHelpers::setTime(2000);
+    MockTimerImpl::setTime(2000);
     t.update();
 
     QVERIFY(t.getState() == Timer::State::Stopped);
@@ -293,12 +293,12 @@ void TestTimer::updateIfPaused()
 {
     Timer t(123);
 
-    MockTimerHelpers::setTime(1000);
+    MockTimerImpl::setTime(1000);
 
     t.start();
     t.pause();
 
-    MockTimerHelpers::setTime(2000);
+    MockTimerImpl::setTime(2000);
     t.update();
 
     QVERIFY(t.getState() == Timer::State::Paused);
@@ -309,11 +309,11 @@ void TestTimer::testReset()
 {
     Timer t(123);
 
-    MockTimerHelpers::setTime(1000);
+    MockTimerImpl::setTime(1000);
 
     t.start();
 
-    MockTimerHelpers::setTime(1100);
+    MockTimerImpl::setTime(1100);
     t.update();
 
     QVERIFY(t.getState() == Timer::State::Running);
@@ -329,7 +329,7 @@ void TestTimer::startAfterReset()
 {
     Timer t(123);
 
-    MockTimerHelpers::setTime(1000);
+    MockTimerImpl::setTime(1000);
 
     t.start();
 
@@ -341,11 +341,11 @@ void TestTimer::startAfterReset()
     QVERIFY(t.getState() == Timer::State::Stopped);
     QCOMPARE(t.getRemainingTime(), 234);
 
-    MockTimerHelpers::setTime(2000);
+    MockTimerImpl::setTime(2000);
 
     t.start();
 
-    MockTimerHelpers::setTime(2200);
+    MockTimerImpl::setTime(2200);
 
     t.update();
 

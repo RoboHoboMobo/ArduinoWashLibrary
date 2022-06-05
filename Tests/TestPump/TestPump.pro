@@ -8,9 +8,9 @@ prefix = $$PWD/../../Sources
 
 INCLUDEPATH += $$prefix
 
-SOURCES += tst_timer.cpp \
-    $$prefix/Timer.cpp \
-    MockTimerImpl.cpp
+SOURCES += tst_pump.cpp \
+    $$prefix/Pump.cpp \
+    $$prefix/PinImpl.cpp
 
-HEADERS += $$prefix/Timer.h \
-    MockTimerImpl.h
+HEADERS += $$prefix/Pump.h \
+    $$prefix/PinImpl.h

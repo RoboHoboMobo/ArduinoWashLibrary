@@ -1,3 +1,4 @@
 TEMPLATE = subdirs
 
-SUBDIRS += TestTimer
+SUBDIRS += TestTimer \
+    TestPump

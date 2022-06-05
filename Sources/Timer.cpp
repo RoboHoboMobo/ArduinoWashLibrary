@@ -1,6 +1,6 @@
 #include "Timer.h"
 
-#include "TimerHelpers.h"
+#include "TimerImpl.h"
 
 Timer::Timer(uint32_t duration)
     : m_state{Stopped}
