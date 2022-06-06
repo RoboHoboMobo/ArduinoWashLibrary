@@ -28,6 +28,11 @@ void Pump::off()
     m_isOn = false;
 }
 
+uint8_t Pump::getPin() const
+{
+    return m_pin;
+}
+
 bool Pump::isOn() const
 {
     return m_isOn;

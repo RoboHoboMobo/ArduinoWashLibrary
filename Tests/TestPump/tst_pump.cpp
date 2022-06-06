@@ -2,7 +2,7 @@
 
 #include "Pump.h"
 
-// #include "MockPumpImpl.h"
+#include "MockPinImpl.h"
 
 class TestPump : public QObject
 {
@@ -13,6 +13,11 @@ public:
     ~TestPump();
 
 private slots:
+    void initPump();
+    void switchFromOffToOff();
+    void switchFromOffToOn();
+    void switchFromOnToOff();
+    void switchFromOnToOn();
 };
 
 TestPump::TestPump()
@@ -21,6 +26,78 @@ TestPump::TestPump()
 
 TestPump::~TestPump()
 {
+}
+
+void TestPump::initPump()
+{
+    MockPinImpl::reset();
+
+    Pump p(123);
+
+    QCOMPARE(p.getPin(), 123u);
+
+    QCOMPARE(MockPinImpl::getPin(), 123u);
+    QVERIFY(!MockPinImpl::getPinCurrentState());
+}
+
+void TestPump::switchFromOffToOff()
+{
+    MockPinImpl::reset();
+
+    Pump p(123, false);
+
+    p.off();
+
+    QCOMPARE(p.getPin(), 123u);
+    QVERIFY(!p.isOn());
+
+    QCOMPARE(MockPinImpl::getPin(), p.getPin());
+    QVERIFY(!MockPinImpl::getPinCurrentState());
+}
+
+void TestPump::switchFromOffToOn()
+{
+    MockPinImpl::reset();
+
+    Pump p(123, false);
+
+    p.on();
+
+    QCOMPARE(p.getPin(), 123u);
+    QVERIFY(p.isOn());
+
+    QCOMPARE(MockPinImpl::getPin(), p.getPin());
+    QVERIFY(MockPinImpl::getPinCurrentState());
+}
+
+void TestPump::switchFromOnToOff()
+{
+    MockPinImpl::reset();
+
+    Pump p(123, true);
+
+    p.off();
+
+    QCOMPARE(p.getPin(), 123u);
+    QVERIFY(!p.isOn());
+
+    QCOMPARE(MockPinImpl::getPin(), p.getPin());
+    QVERIFY(!MockPinImpl::getPinCurrentState());
+}
+
+void TestPump::switchFromOnToOn()
+{
+    MockPinImpl::reset();
+
+    Pump p(123, true);
+
+    p.on();
+
+    QCOMPARE(p.getPin(), 123u);
+    QVERIFY(p.isOn());
+
+    QCOMPARE(MockPinImpl::getPin(), p.getPin());
+    QVERIFY(MockPinImpl::getPinCurrentState());
 }
 
 QTEST_APPLESS_MAIN(TestPump)

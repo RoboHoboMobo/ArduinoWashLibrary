@@ -13,7 +13,7 @@ public:
     ~TestTimer();
 
 private slots:
-    void Init();
+    void init();
 
     void startIfStoppedAndHasRemain();
     void startIfStoppedWithoutRemain();
@@ -49,12 +49,12 @@ TestTimer::~TestTimer()
 {
 }
 
-void TestTimer::Init()
+void TestTimer::init()
 {
     Timer t(123);
 
     QVERIFY(t.getState() == Timer::State::Stopped);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::startIfStoppedAndHasRemain()
@@ -62,14 +62,14 @@ void TestTimer::startIfStoppedAndHasRemain()
     Timer t(123);
 
     QVERIFY(t.getState() == Timer::State::Stopped);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     MockTimerImpl::setTime(1000);
 
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::startIfStoppedWithoutRemain()
@@ -77,12 +77,12 @@ void TestTimer::startIfStoppedWithoutRemain()
     Timer t(0);
 
     QVERIFY(t.getState() == Timer::State::Stopped);
-    QCOMPARE(t.getRemainingTime(), 0);
+    QCOMPARE(t.getRemainingTime(), 0u);
 
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Stopped);
-    QCOMPARE(t.getRemainingTime(), 0);
+    QCOMPARE(t.getRemainingTime(), 0u);
 }
 
 void TestTimer::startIfRunning()
@@ -91,12 +91,12 @@ void TestTimer::startIfRunning()
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::startIfPaused()
@@ -105,17 +105,17 @@ void TestTimer::startIfPaused()
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     t.pause();
 
     QVERIFY(t.getState() == Timer::State::Paused);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Paused);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::stopIfStopped()
@@ -124,7 +124,7 @@ void TestTimer::stopIfStopped()
     t.stop();
 
     QVERIFY(t.getState() == Timer::State::Stopped);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::stopIfRunning()
@@ -133,12 +133,12 @@ void TestTimer::stopIfRunning()
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     t.stop();
 
     QVERIFY(t.getState() == Timer::State::Stopped);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::stopIfPaused()
@@ -147,17 +147,17 @@ void TestTimer::stopIfPaused()
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     t.pause();
 
     QVERIFY(t.getState() == Timer::State::Paused);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     t.stop();
 
     QVERIFY(t.getState() == Timer::State::Stopped);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::resumeIfStopped()
@@ -166,7 +166,7 @@ void TestTimer::resumeIfStopped()
     t.resume();
 
     QVERIFY(t.getState() == Timer::State::Stopped);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::resumeIfRunning()
@@ -175,12 +175,12 @@ void TestTimer::resumeIfRunning()
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     t.resume();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::resumeIfPaused()
@@ -189,17 +189,17 @@ void TestTimer::resumeIfPaused()
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     t.pause();
 
     QVERIFY(t.getState() == Timer::State::Paused);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     t.resume();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::pauseIfStopped()
@@ -208,7 +208,7 @@ void TestTimer::pauseIfStopped()
     t.pause();
 
     QVERIFY(t.getState() == Timer::State::Stopped);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::pauseIfRunning()
@@ -217,12 +217,12 @@ void TestTimer::pauseIfRunning()
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     t.pause();
 
     QVERIFY(t.getState() == Timer::State::Paused);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::pauseIfPaused()
@@ -231,17 +231,17 @@ void TestTimer::pauseIfPaused()
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     t.pause();
 
     QVERIFY(t.getState() == Timer::State::Paused);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     t.pause();
 
     QVERIFY(t.getState() == Timer::State::Paused);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::updateIfStopped()
@@ -252,7 +252,7 @@ void TestTimer::updateIfStopped()
     t.update();
 
     QVERIFY(t.getState() == Timer::State::Stopped);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::updateIfRunningAndHasRemain()
@@ -263,13 +263,13 @@ void TestTimer::updateIfRunningAndHasRemain()
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     MockTimerImpl::setTime(1122);
     t.update();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 1);
+    QCOMPARE(t.getRemainingTime(), 1u);
 }
 
 void TestTimer::updateIfRunningWithoutRemain()
@@ -280,13 +280,13 @@ void TestTimer::updateIfRunningWithoutRemain()
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
     MockTimerImpl::setTime(2000);
     t.update();
 
     QVERIFY(t.getState() == Timer::State::Stopped);
-    QCOMPARE(t.getRemainingTime(), 0);
+    QCOMPARE(t.getRemainingTime(), 0u);
 }
 
 void TestTimer::updateIfPaused()
@@ -302,7 +302,7 @@ void TestTimer::updateIfPaused()
     t.update();
 
     QVERIFY(t.getState() == Timer::State::Paused);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 void TestTimer::testReset()
@@ -313,16 +313,16 @@ void TestTimer::testReset()
 
     t.start();
 
-    MockTimerImpl::setTime(1100);
+    MockTimerImpl::setTime(1100u);
     t.update();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 23);
+    QCOMPARE(t.getRemainingTime(), 23u);
 
-    t.reset(234);
+    t.reset(234u);
 
     QVERIFY(t.getState() == Timer::State::Stopped);
-    QCOMPARE(t.getRemainingTime(), 234);
+    QCOMPARE(t.getRemainingTime(), 234u);
 }
 
 void TestTimer::startAfterReset()
@@ -334,12 +334,12 @@ void TestTimer::startAfterReset()
     t.start();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 123);
+    QCOMPARE(t.getRemainingTime(), 123u);
 
-    t.reset(234);
+    t.reset(234u);
 
     QVERIFY(t.getState() == Timer::State::Stopped);
-    QCOMPARE(t.getRemainingTime(), 234);
+    QCOMPARE(t.getRemainingTime(), 234u);
 
     MockTimerImpl::setTime(2000);
 
@@ -350,7 +350,7 @@ void TestTimer::startAfterReset()
     t.update();
 
     QVERIFY(t.getState() == Timer::State::Running);
-    QCOMPARE(t.getRemainingTime(), 34);
+    QCOMPARE(t.getRemainingTime(), 34u);
 }
 
 QTEST_APPLESS_MAIN(TestTimer)

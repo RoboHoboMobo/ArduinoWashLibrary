@@ -10,6 +10,7 @@ public:
     void on();
     void off();
 
+    uint8_t getPin() const;
     bool isOn() const;
 
 private:

@@ -10,7 +10,8 @@ INCLUDEPATH += $$prefix
 
 SOURCES += tst_pump.cpp \
     $$prefix/Pump.cpp \
-    $$prefix/PinImpl.cpp
+    MockPinImpl.cpp
 
 HEADERS += $$prefix/Pump.h \
-    $$prefix/PinImpl.h
+    $$prefix/PinImpl.h \
+    MockPinImpl.h
