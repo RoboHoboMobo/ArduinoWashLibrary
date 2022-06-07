@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        ArduinoButtonImpl.cpp \
         PinImpl.cpp \
         Pump.cpp \
         Timer.cpp \
@@ -11,8 +12,9 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
+    ArduinoButton.h \
+    ArduinoButtonImpl.h \
     Common.h \
-    FloatLevelSensorImpl.h \
     PinImpl.h \
     Pump.h \
     Sensors.h \

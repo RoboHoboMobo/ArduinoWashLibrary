@@ -1,16 +1,9 @@
 #include "PinImpl.h"
 
-void switchPinOn(uint8_t pin)
+void writeDigitalPin(uint8_t pin, uint8_t value)
 {
 #if ARDUINO == 1
-    digitalWrite(pin, HIGH);
-#endif
-}
-
-void switchPinOff(uint8_t pin)
-{
-#if ARDUINO == 1
-    digitalWrite(pin, LOW);
+    digitalWrite(pin, value);
 #endif
 }
 
@@ -28,4 +21,14 @@ void setPinMode(uint8_t pin, uint8_t mode)
 #if ARDUINO == 1
     return pinMode(pin, mode);
 #endif
+}
+
+void switchPinOn(uint8_t pin)
+{
+    writeDigitalPin(pin, HIGH);
+}
+
+void switchPinOff(uint8_t pin)
+{
+    writeDigitalPin(pin, LOW);
 }

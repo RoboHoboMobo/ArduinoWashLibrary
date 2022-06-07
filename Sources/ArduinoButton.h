@@ -1,4 +1,9 @@
+/**
+ * @author AlexGyver https://alexgyver.ru
+ */
+
 #include "Common.h"
+#include "ArduinoButtonImpl.h"
 #include "PinImpl.h"
 #include "TimerImpl.h"
 
@@ -124,10 +129,15 @@ public:
     // ===================================== TICK =====================================
     // тикер, вызывать как можно чаще
     // вернёт отличное от нуля значение, если произошло какое то событие
-    uint8_t tick(uint8_t s1 = 0, uint8_t s2 = 0, uint8_t key = 0) {
+    uint8_t tick(uint8_t s1 = 0, uint8_t s2 = 0, uint8_t key = 0)
+    {
+    #if ARDUINO == 1
         tickISR(s1, s2, key);
         checkCallback();
         return EBState;
+    #endif
+
+        return updateButton();
     }
 
     // тикер специально для прерывания, не проверяет коллбэки
@@ -221,7 +231,15 @@ public:
     bool click() { return checkState(5); }          // клик по кнопке
 
     bool held() { return checkState(6); }           // кнопка удержана
-    bool hold() { return readF(4); }                // кнопка удерживается
+
+    bool hold() // кнопка удерживается
+    {
+    #if ARDUINO == 1
+        return readF(4);
+    #endif
+
+        return isButtonHold();
+    }
     bool step() { return checkState(7); }           // режим импульсного удержания
     bool releaseStep() { return checkFlag(12); }    // кнопка отпущена после импульсного удержания
 
@@ -417,22 +435,3 @@ private:
 };
 
 #endif
-
-
-template <uint8_t KEY>
-bool getFloatLevelSensorData(EncButton<KEY>& button)
-{
-#if ARDUINO == 1
-    button.hold();
-#endif
-
-    return {};
-}
-
-template <uint8_t KEY>
-void updateFloatLevelSensor(EncButton<KEY>& button)
-{
-#if ARDUINO == 1
-    button.tick();
-#endif
-}

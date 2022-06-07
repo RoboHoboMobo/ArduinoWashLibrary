@@ -1,4 +1,5 @@
 TEMPLATE = subdirs
 
 SUBDIRS += TestTimer \
-    TestPump
+    TestPump \
+    TestFloatLevelSensor
