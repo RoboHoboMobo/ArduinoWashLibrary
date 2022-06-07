@@ -1,37 +1,33 @@
 #pragma once
 
-#include "Common.h"
+#include "FloatLevelSensorImpl.h"
 
-/**
- * @brief Base class for sensors
- */
-class Sensor
+template <uint8_t KEY>
+class FloatLevelSensor
 {
 public:
     uint8_t getPin() const;
-
-protected:
-    Sensor(uint8_t pin);
+    bool getData();
+    void update();
 
 private:
-    uint8_t m_pin;
+    EncButton<EB_TICK, KEY> m_btn;
 };
 
-/**
- * @brief Adapter class for sensors with bool data
- */
-class BinarySensor : public Sensor
+template <uint8_t KEY>
+uint8_t FloatLevelSensor<KEY>::getPin() const
 {
-public:
-    virtual bool getData() = 0;
-};
+    return KEY;
+}
 
-/**
- * @brief Adapter class for sensors with int data
- */
-class IntegerSensor : public Sensor
+template <uint8_t KEY>
+bool FloatLevelSensor<KEY>::getData()
 {
-public:
-    virtual int32_t getData() = 0;
-};
+    return getFloatLevelSensorData(m_btn);
+}
 
+template <uint8_t KEY>
+void FloatLevelSensor<KEY>::update()
+{
+    updateFloatLevelSensor(m_btn);
+}
