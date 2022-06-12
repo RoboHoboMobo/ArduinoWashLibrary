@@ -9,11 +9,11 @@ prefix = $$PWD/../../Sources
 INCLUDEPATH += $$prefix
 
 SOURCES += tst_floatlevelsensor.cpp \
-    $$prefix/PinImpl.cpp \
-    MockArduinoButtonImpl.cpp
+    $$prefix/PinImpl.cpp
 
 HEADERS += $$prefix/Sensors.h \
     $$prefix/ArduinoButton.h \
-    $$prefix/ArduinoButtonImpl.h \
     $$prefix/PinImpl.h \
-    MockArduinoButtonImpl.h
+    $$prefix/SensorsImpl.h \
+    MockSensorsImpl.tpp
+

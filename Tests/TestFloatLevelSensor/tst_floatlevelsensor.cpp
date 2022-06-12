@@ -2,7 +2,7 @@
 
 #include "Sensors.h"
 
-#include "MockArduinoButtonImpl.h"
+#include "MockSensorsImpl.tpp"
 
 class TestFloatLevelSensor : public QObject
 {
@@ -14,6 +14,8 @@ public:
 
 private slots:
     void test0();
+    void getData();
+    void update();
 };
 
 TestFloatLevelSensor::TestFloatLevelSensor()
@@ -28,10 +30,25 @@ void TestFloatLevelSensor::test0()
 {
     FloatLevelSensor<123> s;
 
-    MockArduinoButtonImpl::setIsButtonHold(true);
-
     QCOMPARE(s.getPin(), 123u);
+}
+
+void TestFloatLevelSensor::getData()
+{
+    FloatLevelSensor<123> s;
+
+    MockSensorsImpl::setFloatLevelSensorData(true);
+
     QVERIFY(s.getData());
+}
+
+void TestFloatLevelSensor::update()
+{
+    FloatLevelSensor<123> s;
+
+    s.update();
+
+    QVERIFY(MockSensorsImpl::isUpdated());
 }
 
 QTEST_APPLESS_MAIN(TestFloatLevelSensor)

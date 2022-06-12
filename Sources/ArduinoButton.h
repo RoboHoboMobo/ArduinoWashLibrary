@@ -3,7 +3,7 @@
  */
 
 #include "Common.h"
-#include "ArduinoButtonImpl.h"
+
 #include "PinImpl.h"
 #include "TimerImpl.h"
 
@@ -14,6 +14,10 @@
 #define _EB_FAST 30         // таймаут быстрого поворота
 #define _EB_DEB 50          // дебаунс кнопки
 #define _EB_CLICK 400	    // таймаут накликивания
+
+#ifndef nullptr
+#define nullptr 0
+#endif
 
 #ifndef EB_FAST
 #define EB_FAST _EB_FAST
@@ -129,15 +133,10 @@ public:
     // ===================================== TICK =====================================
     // тикер, вызывать как можно чаще
     // вернёт отличное от нуля значение, если произошло какое то событие
-    uint8_t tick(uint8_t s1 = 0, uint8_t s2 = 0, uint8_t key = 0)
-    {
-    #if ARDUINO == 1
+    uint8_t tick(uint8_t s1 = 0, uint8_t s2 = 0, uint8_t key = 0) {
         tickISR(s1, s2, key);
         checkCallback();
         return EBState;
-    #endif
-
-        return updateButton();
     }
 
     // тикер специально для прерывания, не проверяет коллбэки
@@ -231,15 +230,7 @@ public:
     bool click() { return checkState(5); }          // клик по кнопке
 
     bool held() { return checkState(6); }           // кнопка удержана
-
-    bool hold() // кнопка удерживается
-    {
-    #if ARDUINO == 1
-        return readF(4);
-    #endif
-
-        return isButtonHold();
-    }
+    bool hold() { return readF(4); }                // кнопка удерживается
     bool step() { return checkState(7); }           // режим импульсного удержания
     bool releaseStep() { return checkFlag(12); }    // кнопка отпущена после импульсного удержания
 

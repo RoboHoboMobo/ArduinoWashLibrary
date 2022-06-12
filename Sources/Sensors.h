@@ -1,7 +1,10 @@
 #pragma once
 
-#include "ArduinoButton.h"
+#include "SensorsImpl.h"
 
+/**
+ * @brief FloatLevelSensor
+ */
 template <uint8_t KEY>
 class FloatLevelSensor
 {
@@ -23,11 +26,11 @@ uint8_t FloatLevelSensor<KEY>::getPin() const
 template <uint8_t KEY>
 bool FloatLevelSensor<KEY>::getData()
 {
-    return m_btn.hold();
+    return getFloatLevelSensorData(m_btn);
 }
 
 template <uint8_t KEY>
 void FloatLevelSensor<KEY>::update()
 {
-    m_btn.tick();
+    updateFloatLevelSensorData(m_btn);
 }
