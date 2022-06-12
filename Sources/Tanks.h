@@ -2,24 +2,25 @@
 
 #include "Common.h"
 
+enum TankStatus
+{
+    NotFull = 0,
+    Full,
+    Error = 0xFF
+};
+
 /**
  * @brief Base class for reservoirs
  */
-template<typename SensorType>
+template<typename SensorType, uint8_t sensorsNum = 0>
 class Tank
 {
 public:
-    enum Status {
-        NotFull = 0,
-        Full,
-        Error = 0xFF
-    };
-
-    Tank(SensorType* levelSensors, uint8_t levelSensorsNum);
+    Tank(SensorType* levelSensors);
 
     SensorType* getLevelSensor(uint8_t number);
     uint8_t getSensorsNum() const;
-    Status getStatus() const;
+    TankStatus getStatus() const;
 
     SensorType* getLowerLevelSensor();
     SensorType* getUpperLevelSensor();
@@ -34,53 +35,53 @@ private:
      */
     SensorType* m_levelSensors;
     uint8_t m_levelSensorsNum;
-    Status m_status;
+    TankStatus m_status;
 };
 
-template<typename T>
-Tank<T>::Tank(T* levelSensors, uint8_t levelSensorsNum)
+template <typename T, uint8_t sensorsNum>
+Tank<T, sensorsNum>::Tank(T* levelSensors)
     : m_levelSensors{levelSensors}
-    , m_levelSensorsNum{levelSensorsNum}
+    , m_levelSensorsNum{sensorsNum}
     , m_status{}
 {
     m_status = getStatus();
 }
 
-template <typename T>
-T* Tank<T>::getLevelSensor(uint8_t number)
+template <typename T, uint8_t sensorsNum>
+T* Tank<T, sensorsNum>::getLevelSensor(uint8_t number)
 {
-    if (number >= m_levelSensorsNum)
+    if (m_levelSensorsNum == 0 || number >= m_levelSensorsNum)
         return nullptr;
 
-    return m_levelSensors[m_levelSensorsNum - 1];
+    return m_levelSensors + m_levelSensorsNum - 1;
 }
 
-template <typename T>
-uint8_t Tank<T>::getSensorsNum() const
+template <typename T, uint8_t sensorsNum>
+uint8_t Tank<T, sensorsNum>::getSensorsNum() const
 {
     return m_levelSensorsNum;
 }
 
-template <typename T>
-typename Tank<T>::Status Tank<T>::getStatus() const
+template <typename T, uint8_t sensorsNum>
+TankStatus Tank<T, sensorsNum>::getStatus() const
 {
     if (m_levelSensorsNum == 0)
-        return Status::Error;
+        return TankStatus::Error;
 
     if (m_levelSensorsNum == 1)
-        return m_levelSensors->getData() ? Status::Full : Status::NotFull;
+        return m_levelSensors->getData() ? TankStatus::Full : TankStatus::NotFull;
 
     /// Error if higher sensor is activated but lower isn't
     for (uint8_t i = 1; i < m_levelSensorsNum; ++i)
         if (!m_levelSensors[i - 1].getData() && m_levelSensors[i].getData())
-            return Status::Error;
+            return TankStatus::Error;
 
     return m_levelSensors[m_levelSensorsNum - 1].getData() ?
-            Status::Full : Status::NotFull;
+            TankStatus::Full : TankStatus::NotFull;
 }
 
-template <typename T>
-T* Tank<T>::getLowerLevelSensor()
+template <typename T, uint8_t sensorsNum>
+T* Tank<T, sensorsNum>::getLowerLevelSensor()
 {
     if (m_levelSensorsNum == 0)
         return nullptr;
@@ -88,23 +89,23 @@ T* Tank<T>::getLowerLevelSensor()
     return m_levelSensors;
 }
 
-template <typename T>
-T* Tank<T>::getUpperLevelSensor()
+template <typename T, uint8_t sensorsNum>
+T* Tank<T, sensorsNum>::getUpperLevelSensor()
 {
     if (m_levelSensorsNum == 0)
         return nullptr;
 
-    return m_levelSensors[m_levelSensorsNum - 1];
+    return m_levelSensors + m_levelSensorsNum - 1;
 }
 
-template <typename T>
-bool Tank<T>::isFull() const
+template <typename T, uint8_t sensorsNum>
+bool Tank<T, sensorsNum>::isFull() const
 {
-    return getStatus() == Status::Full;
+    return getStatus() == TankStatus::Full;
 }
 
-template <typename T>
-void Tank<T>::update()
+template <typename T, uint8_t sensorsNum>
+void Tank<T, sensorsNum>::update()
 {
     for (uint8_t i = 0; i < m_levelSensorsNum; ++i)
         m_levelSensors[i].update();
