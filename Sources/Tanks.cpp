@@ -6,7 +6,7 @@
 
 bool Tank::isFull()
 {
-    return getStatus() == Status::Full;
+    return getStatus() == Full;
 }
 
 void Tank::update()
@@ -59,12 +59,12 @@ Sensor* Cube::getUpperLevelSensor()
 Tank::Status Cube::getStatus()
 {
     if (getLevelSensorsNum() == 0)
-        return Status::Error;
+        return Error;
 
     if (getLevelSensorsNum() == 1) {
         BinarySensor* sensor = static_cast<BinarySensor*>(getLowerLevelSensor());
 
-        return sensor->getData() ? Status::Full : Status::NotFull;
+        return sensor->getData() ? Full : NotFull;
     }
 
     /// Error if higher sensor is activated but lower isn't
@@ -73,9 +73,9 @@ Tank::Status Cube::getStatus()
         BinarySensor* curSensor = static_cast<BinarySensor*>(getLevelSensor(i));
 
         if (!prevSensor->getData() && curSensor->getData())
-            return Status::Error;
+            return Error;
     }
 
     return static_cast<BinarySensor*>(getUpperLevelSensor())->getData() ?
-                Status::Full : Status::NotFull;
+                Full : NotFull;
 }
