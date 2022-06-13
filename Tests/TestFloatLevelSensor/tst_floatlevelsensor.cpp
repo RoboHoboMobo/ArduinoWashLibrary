@@ -2,7 +2,7 @@
 
 #include "Sensors.h"
 
-#include "MockSensorsImpl.tpp"
+#include "MockSensorsImpl.h"
 
 class TestFloatLevelSensor : public QObject
 {
@@ -28,14 +28,14 @@ TestFloatLevelSensor::~TestFloatLevelSensor()
 
 void TestFloatLevelSensor::test0()
 {
-    FloatLevelSensor<123> s;
+    FloatLevelSensor s(123);
 
     QCOMPARE(s.getPin(), 123u);
 }
 
 void TestFloatLevelSensor::getData()
 {
-    FloatLevelSensor<123> s;
+    FloatLevelSensor s(123);
 
     MockSensorsImpl::setFloatLevelSensorData(true);
 
@@ -44,7 +44,7 @@ void TestFloatLevelSensor::getData()
 
 void TestFloatLevelSensor::update()
 {
-    FloatLevelSensor<123> s;
+    FloatLevelSensor s(123);
 
     s.update();
 

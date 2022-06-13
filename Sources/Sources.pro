@@ -6,6 +6,8 @@ CONFIG -= qt
 SOURCES += \
         PinImpl.cpp \
         Pump.cpp \
+        Sensors.cpp \
+        SensorsImpl.cpp \
         Timer.cpp \
         TimerImpl.cpp \
         main.cpp

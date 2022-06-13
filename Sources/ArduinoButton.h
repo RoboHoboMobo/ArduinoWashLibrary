@@ -66,11 +66,20 @@ enum eb_callback {
 #define EB_HALFSTEP 1
 
 // ===================================== CLASS =====================================
-template < uint8_t _EB_MODE, uint8_t _S1 = EB_NO_PIN, uint8_t _S2 = EB_NO_PIN, uint8_t _KEY = EB_NO_PIN >
+template <uint8_t _EB_MODE>
 class EncButton {
 public:
+    uint8_t _S1;
+    uint8_t _S2;
+    uint8_t _KEY;
+
     // можно указать режим работы пина
-    EncButton(const uint8_t mode = INPUT_PULLUP) {
+    EncButton(const uint8_t mode = INPUT_PULLUP,
+              uint8_t _S1 = EB_NO_PIN, uint8_t _S2 = EB_NO_PIN, uint8_t _KEY = EB_NO_PIN)
+        : _S1{_S1}
+        , _S2{_S2}
+        , _KEY{_KEY}
+    {
         if (_S1 < 252 && mode == INPUT_PULLUP) pullUp();
         setButtonLevel(_S1 < 252 ? LOW : HIGH);     // высокий уровень в виртуальном режиме
         #ifdef EB_HALFSTEP_ENC  // совместимость
