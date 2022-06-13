@@ -19,7 +19,7 @@ HEADERS += \
     Pump.h \
     Sensors.h \
     SensorsImpl.h \
-    SensorsImpl.tpp \
+    SensorsImplDef.h \
     Tanks.h \
     Timer.h \
     TimerImpl.h

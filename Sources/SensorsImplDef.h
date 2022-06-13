@@ -1,5 +1,9 @@
 #include "ArduinoButton.h"
 
+/**
+ * Template functions implementation from SensorsImpl.h
+ */
+
 template <uint8_t mode>
 bool getFloatLevelSensorData(EncButton<mode>& arduinoButton)
 {
