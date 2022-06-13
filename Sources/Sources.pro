@@ -18,6 +18,7 @@ HEADERS += \
     Common.h \
     PinImpl.h \
     Pump.h \
+    PumpController.h \
     Sensors.h \
     SensorsImpl.h \
     SensorsImplDef.h \
