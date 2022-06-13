@@ -8,6 +8,7 @@ SOURCES += \
         Pump.cpp \
         Sensors.cpp \
         SensorsImpl.cpp \
+        Tanks.cpp \
         Timer.cpp \
         TimerImpl.cpp \
         main.cpp

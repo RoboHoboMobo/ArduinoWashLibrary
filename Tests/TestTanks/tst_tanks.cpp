@@ -15,7 +15,7 @@ public:
 private slots:
     void getLevelSensorIfNull();
     void getLevelSensorIfNotNull();
-    void getSensorsNum();
+    void getLevelSensorsNum();
     void getStatusIfNoSensors();
     void getStatusIfOneSensor();
     void getStatusIfNoSensorsActivated();
@@ -41,189 +41,233 @@ TestTanks::~TestTanks()
 
 void TestTanks::getLevelSensorIfNull()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123)};
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor* s[] = {&s0, &s1};
 
-    Tank<TestSensor> t(s);
+    Cube c(reinterpret_cast<Sensor**>(s));
 
-    QCOMPARE(t.getSensorsNum(), 0u);
-    QCOMPARE(t.getLevelSensor(0), nullptr);
+    QCOMPARE(c.getLevelSensorsNum(), 0u);
+    QVERIFY(!c.getLevelSensor(0));
 }
 
 void TestTanks::getLevelSensorIfNotNull()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123)};
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor* s[] = {&s0, &s1};
 
-    Tank<TestSensor, 2> t(s);
+    Cube c(reinterpret_cast<Sensor**>(s), 2);
 
-    TestSensor* result = t.getLevelSensor(1);
+    auto result = static_cast<TestSensor*>(c.getLevelSensor(1));
 
-    QCOMPARE(t.getSensorsNum(), 2u);
-    QCOMPARE(result, s + 1);
-    QCOMPARE(result->getPin(), s[1].getPin());
+    QCOMPARE(c.getLevelSensorsNum(), 2u);
+    QCOMPARE(result, s[1]);
+    QCOMPARE(result->getPin(), s[1]->getPin());
 }
 
-void TestTanks::getSensorsNum()
+void TestTanks::getLevelSensorsNum()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123)};
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor* s[] = {&s0, &s1};
 
-    Tank<TestSensor, 2> t(s);
+    Cube c(reinterpret_cast<Sensor**>(s), 2);
 
-    QCOMPARE(t.getSensorsNum(), 2u);
+    QCOMPARE(c.getLevelSensorsNum(), 2u);
 }
 
 void TestTanks::getStatusIfNoSensors()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123), TestSensor(0)};
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor* s[] = {&s0, &s1};
 
-    Tank<TestSensor, 0> t(s);
+    Cube c(reinterpret_cast<Sensor**>(s), 0);
 
-    QCOMPARE(t.getSensorsNum(), 0u);
-    QCOMPARE(t.getStatus(), TankStatus::Error);
+    QCOMPARE(c.getLevelSensorsNum(), 0u);
+    QCOMPARE(c.getStatus(), Tank::Status::Error);
 }
 
 void TestTanks::getStatusIfOneSensor()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123), TestSensor(0)};
-    s[0].setData(true);
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor s2(0);
+    TestSensor* s[] = {&s0, &s1, &s2};
 
-    Tank<TestSensor, 1> t(s);
+    s[0]->setData(true);
 
-    QCOMPARE(t.getSensorsNum(), 1u);
-    QCOMPARE(t.getStatus(), TankStatus::Full);
+    Cube c(reinterpret_cast<Sensor**>(s), 1);
+
+    QCOMPARE(c.getLevelSensorsNum(), 1u);
+    QCOMPARE(c.getStatus(), Tank::Status::Full);
 }
 
 void TestTanks::getStatusIfNoSensorsActivated()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123), TestSensor(0)};
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor s2(0);
+    TestSensor* s[] = {&s0, &s1, &s2};
 
-    Tank<TestSensor, 3> t(s);
+    Cube c(reinterpret_cast<Sensor**>(s), 3);
 
-    QCOMPARE(t.getSensorsNum(), 3u);
-    QCOMPARE(t.getStatus(), TankStatus::NotFull);
+    QCOMPARE(c.getLevelSensorsNum(), 3u);
+    QCOMPARE(c.getStatus(), Tank::Status::NotFull);
 }
 
 void TestTanks::getStatusIfOnlyMidSensorIsActivated()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123), TestSensor(0)};
-    s[1].setData(true);
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor s2(0);
+    TestSensor* s[] = {&s0, &s1, &s2};
 
-    Tank<TestSensor, 3> t(s);
+    s[1]->setData(true);
 
-    QCOMPARE(t.getSensorsNum(), 3u);
-    QCOMPARE(t.getStatus(), TankStatus::Error);
+    Cube c(reinterpret_cast<Sensor**>(s), 3);
+
+    QCOMPARE(c.getLevelSensorsNum(), 3u);
+    QCOMPARE(c.getStatus(), Tank::Status::Error);
 }
 
 void TestTanks::getStatusIfAllSensorsActivated()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123), TestSensor(0)};
-    s[0].setData(true);
-    s[1].setData(true);
-    s[2].setData(true);
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor s2(0);
+    TestSensor* s[] = {&s0, &s1, &s2};
 
-    Tank<TestSensor, 3> t(s);
+    s[0]->setData(true);
+    s[1]->setData(true);
+    s[2]->setData(true);
 
-    QCOMPARE(t.getSensorsNum(), 3u);
-    QCOMPARE(t.getStatus(), TankStatus::Full);
+    Cube c(reinterpret_cast<Sensor**>(s), 3);
+
+    QCOMPARE(c.getLevelSensorsNum(), 3u);
+    QCOMPARE(c.getStatus(), Tank::Status::Full);
 }
 
 void TestTanks::getLowerSensorIfNull()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123), TestSensor(0)};
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor s2(0);
+    TestSensor* s[] = {&s0, &s1, &s2};
 
-    Tank<TestSensor, 0> t(s);
+    Cube c(reinterpret_cast<Sensor**>(s));
 
-    QCOMPARE(t.getSensorsNum(), 0u);
-
-    TestSensor* result = t.getLowerLevelSensor();
-
-    QCOMPARE(result, nullptr);
+    QCOMPARE(c.getLevelSensorsNum(), 0u);
+    QVERIFY(!c.getLowerLevelSensor());
 }
 
 void TestTanks::getLowerSensor()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123), TestSensor(0)};
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor s2(0);
+    TestSensor* s[] = {&s0, &s1, &s2};
 
-    Tank<TestSensor, 3> t(s);
+    Cube c(reinterpret_cast<Sensor**>(s), 3);
 
-    QCOMPARE(t.getSensorsNum(), 3u);
+    QCOMPARE(c.getLevelSensorsNum(), 3u);
 
-    TestSensor* result = t.getLowerLevelSensor();
+    Sensor* result = c.getLowerLevelSensor();
 
-    QCOMPARE(result, s);
-    QCOMPARE(result->getPin(), s[0].getPin());
+    QCOMPARE(result, s[0]);
+    QCOMPARE(result->getPin(), s[0]->getPin());
 }
 
 void TestTanks::getUpperSensorIfNull()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123), TestSensor(0)};
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor s2(0);
+    TestSensor* s[] = {&s0, &s1, &s2};
 
-    Tank<TestSensor, 0> t(s);
+    Cube c(reinterpret_cast<Sensor**>(s));
 
-    QCOMPARE(t.getSensorsNum(), 0u);
+    QCOMPARE(c.getLevelSensorsNum(), 0u);
 
-    TestSensor* result = t.getUpperLevelSensor();
+    Sensor* result = c.getUpperLevelSensor();
 
-    QCOMPARE(result, nullptr);
+    QVERIFY(!result);
 }
 
 void TestTanks::getUpperSensor()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123), TestSensor(0)};
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor s2(0);
+    TestSensor* s[] = {&s0, &s1, &s2};
 
-    Tank<TestSensor, 3> t(s);
+    Cube c(reinterpret_cast<Sensor**>(s), 3);
 
-    QCOMPARE(t.getSensorsNum(), 3u);
+    QCOMPARE(c.getLevelSensorsNum(), 3u);
 
-    TestSensor* result = t.getUpperLevelSensor();
+    auto result = static_cast<TestSensor*>(c.getUpperLevelSensor());
 
-    QCOMPARE(result, s + 2);
-    QCOMPARE(result->getPin(), s[2].getPin());
+    QCOMPARE(result, s[2]);
+    QCOMPARE(result->getPin(), s[2]->getPin());
 }
 
 void TestTanks::isFullIfNotFull()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123), TestSensor(0)};
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor s2(0);
+    TestSensor* s[] = {&s0, &s1, &s2};
 
-    Tank<TestSensor, 3> t(s);
+    Cube c(reinterpret_cast<Sensor**>(s), 3);
 
-    QCOMPARE(t.getSensorsNum(), 3u);
-    QVERIFY(!t.isFull());
+    QCOMPARE(c.getLevelSensorsNum(), 3u);
+    QVERIFY(!c.isFull());
 }
 
 void TestTanks::isFullIfError()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123), TestSensor(0)};
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor s2(0);
+    TestSensor* s[] = {&s0, &s1, &s2};
 
-    Tank<TestSensor, 0> t(s);
+    Cube c(reinterpret_cast<Sensor**>(s));
 
-    QCOMPARE(t.getSensorsNum(), 0u);
-    QVERIFY(!t.isFull());
+    QCOMPARE(c.getLevelSensorsNum(), 0u);
+    QVERIFY(!c.isFull());
 }
 
 void TestTanks::isFullIfFull()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123), TestSensor(0)};
-    s[0].setData(true);
-    s[1].setData(true);
-    s[2].setData(true);
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor s2(0);
+    TestSensor* s[] = {&s0, &s1, &s2};
+    s[0]->setData(true);
+    s[1]->setData(true);
+    s[2]->setData(true);
 
-    Tank<TestSensor, 3> t(s);
+    Cube c(reinterpret_cast<Sensor**>(s), 3);
 
-    QCOMPARE(t.getSensorsNum(), 3u);
-    QVERIFY(t.isFull());
+    QCOMPARE(c.getLevelSensorsNum(), 3u);
+    QVERIFY(c.isFull());
 }
 
 void TestTanks::testUpdate()
 {
-    TestSensor s[] = {TestSensor(1), TestSensor(123), TestSensor(0)};
+    TestSensor s0(1);
+    TestSensor s1(123);
+    TestSensor s2(0);
+    TestSensor* s[] = {&s0, &s1, &s2};
 
-    Tank<TestSensor, 3> t(s);
+    Cube c(reinterpret_cast<Sensor**>(s), 3);
 
-    QCOMPARE(t.getSensorsNum(), 3u);
+    QCOMPARE(c.getLevelSensorsNum(), 3u);
 
-    t.update();
+    c.update();
 
-    QVERIFY(s[0].isUpdated() && s[1].isUpdated() && s[2].isUpdated());
+    QVERIFY(s[0]->isUpdated() && s[1]->isUpdated() && s[2]->isUpdated());
 }
 
 QTEST_APPLESS_MAIN(TestTanks)

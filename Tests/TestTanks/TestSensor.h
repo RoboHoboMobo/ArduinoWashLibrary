@@ -1,14 +1,14 @@
-#include "Common.h"
+#include "Sensors.h"
 
-class TestSensor
+class TestSensor : public BinarySensor
 {
 public:
     TestSensor(uint8_t pin);
 
-    bool getData();
-    void update();
+    uint8_t getPin() const override;
+    void update() override;
+    bool getData() override;
 
-    uint8_t getPin() const;
     void setData(bool data);
     bool isUpdated() const;
 

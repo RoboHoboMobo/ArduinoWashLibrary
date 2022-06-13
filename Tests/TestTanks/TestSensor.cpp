@@ -7,9 +7,9 @@ TestSensor::TestSensor(uint8_t pin)
 {
 }
 
-bool TestSensor::getData()
+uint8_t TestSensor::getPin() const
 {
-    return m_data;
+    return m_pin;
 }
 
 void TestSensor::update()
@@ -17,9 +17,9 @@ void TestSensor::update()
     m_isUpdated = true;
 }
 
-uint8_t TestSensor::getPin() const
+bool TestSensor::getData()
 {
-    return m_pin;
+    return m_data;
 }
 
 void TestSensor::setData(bool data)
