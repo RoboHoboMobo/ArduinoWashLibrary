@@ -8,19 +8,6 @@ uint8_t levelSensorsNum{3};
 Tank::Status status{};
 }
 
-bool Tank::isFull()
-{
-    return getStatus() == Full;
-}
-
-void Tank::update()
-{
-    uint8_t n = getLevelSensorsNum();
-
-    for (uint8_t i = 0; i < n; ++i)
-        getLevelSensor(i)->update();
-}
-
 Sensor* TestTank::getLevelSensor(uint8_t number)
 {
     if (number >= levelSensorsNum)

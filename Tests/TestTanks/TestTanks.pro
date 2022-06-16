@@ -8,9 +8,10 @@ prefix = $$PWD/../../Sources
 
 INCLUDEPATH += $$prefix
 
-SOURCES += tst_tanks.cpp \
-    $$prefix/Tanks.cpp \
-    TestSensor.cpp
+SOURCES += \
+    $$prefix/Tank.cpp \
+    TestSensor.cpp \
+    tst_tank.cpp
 
 HEADERS += $$prefix/Tanks.h \
     TestSensor.h
