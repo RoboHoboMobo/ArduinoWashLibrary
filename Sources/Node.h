@@ -10,9 +10,9 @@
 struct Node
 {
     enum State {
-        PumpOff = 0, ///< Насос не работает
-        PumpOn,      ///< Насос работает
-        Retention,   ///< Очистка (отстаивание) воды
+        PumpOff = 0,  ///< Насос не работает (очистка воды)
+        PumpOn,       ///< Насос работает
+        WaterIsReady, ///< Вода очищена (отстоялась)
 
         Error = 0xFF
     };
@@ -22,7 +22,7 @@ struct Node
      * перекачивающего из истока в сток, и таймера, отсчитывающего время после перекачки
      */
     Node(Pump* pump, Tank* source, Tank* drain, Timer* timer = nullptr,
-         Node* next = nullptr);
+         Node* prev = nullptr, Node* next = nullptr);
 
     State getState() const;
 
@@ -31,17 +31,23 @@ struct Node
     Tank* drain;
     Timer* timer;
 
+    Node* prev;
     Node* next;
 
     /**
      * @brief Возвращает флаг - готов ли узел к перекачке
      */
-    bool isReadyForPumping();
+    bool canPumping();
 
     /**
      * @brief Запустить узел в работу
      */
     void on();
+
+    /**
+     * @brief Закончить перекачку
+     */
+    void finish();
 
     /**
      * @brief Отключить узел

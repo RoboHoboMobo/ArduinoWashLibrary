@@ -7,6 +7,7 @@ SOURCES += \
         Node.cpp \
         PinImpl.cpp \
         Pump.cpp \
+        PumpLogicHelpers.cpp \
         Sensors.cpp \
         SensorsImpl.cpp \
         Tank.cpp \
@@ -20,6 +21,7 @@ HEADERS += \
     Node.h \
     PinImpl.h \
     Pump.h \
+    PumpLogicHelpers.h \
     Sensors.h \
     SensorsImpl.h \
     SensorsImplDef.h \

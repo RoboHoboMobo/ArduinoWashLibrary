@@ -1,10 +1,11 @@
 #include "Node.h"
 
-Node::Node(Pump* pump, Tank* source, Tank* drain, Timer* timer, Node* next)
+Node::Node(Pump* pump, Tank* source, Tank* drain, Timer* timer, Node* prev, Node* next)
     : pump{pump}
     , source{source}
     , drain{drain}
     , timer{timer}
+    , prev{prev}
     , next{next}
 {
     assert(pump);
@@ -20,14 +21,14 @@ Node::State Node::getState() const
     const bool isDone = timer->isDone();
 
     if (!pump->isOn())
-        return isDone ? PumpOff : Retention;
+        return isDone ? WaterIsReady : PumpOff;
     else
         return isDone ? Error : PumpOn;
 
     return Error;
 }
 
-bool Node::isReadyForPumping()
+bool Node::canPumping()
 {
     return source->isDrainable() && drain->isFillable();
 }
@@ -40,11 +41,19 @@ void Node::on()
         timer->reset(timer->getDuration());
 }
 
-void Node::off()
+void Node::finish()
 {
     pump->off();
 
     if (timer)
         timer->start();
+}
+
+void Node::off()
+{
+    pump->off();
+
+    if (timer)
+        timer->reset(timer->getDuration());
 }
 
