@@ -3,12 +3,12 @@
 #include "Node.h"
 
 /**
- * @brief Класс логики работы насосов (связаный список)
+ * @brief Класс контроллера логики работы насосов (связаный список)
  */
-class PumpLogic
+class PumpController
 {
 public:
-    PumpLogic(Node* node = nullptr);
+    PumpController(Node* node = nullptr);
 
     /**
      * @brief Вставить узел перед первым
@@ -43,7 +43,7 @@ public:
     /**
      * @brief Управление узлами
      */
-    bool operate(bool needReverse);
+    bool operate(bool needReverse = false);
 
 private:
     Node* m_head;

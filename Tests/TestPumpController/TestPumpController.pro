@@ -9,20 +9,26 @@ prefix = $$PWD/../../Sources
 INCLUDEPATH += $$prefix
 
 SOURCES += tst_pumpcontroller.cpp \
+    $$prefix/PumpController.cpp \
+    $$prefix/PumpControllerHelpers.cpp \
     $$prefix/Tank.cpp \
-    TestSensor.cpp \
-    $$prefix/Timer.cpp \
-    MockTimerImpl.cpp \
-    $$prefix/Pump.cpp \
-    MockPinImpl.cpp \
-    TestTank.cpp
+    MockNode.cpp \
+    MockPump.cpp \
+    TestNode.cpp \
+    TestTank.cpp \
+    TestSensor.cpp
 
-HEADERS += $$prefix/Tank.h \
-    TestSensor.h \
-    $$prefix/Timer.h \
-    $$prefix/TimerImpl.h \
-    MockTimerImpl.h \
+HEADERS += $$prefix/PumpController.h \
+    $$prefix/PumpControllerHelpers.h \
+    $$prefix/Node.h \
     $$prefix/Pump.h \
-    MockPinImpl.h \
-    TestTank.h
+    $$prefix/Timer.h \
+    $$prefix/Tank.h \
+    $$prefix/Sensors.h \
+    MockNode.h \
+    MockPump.h \
+    TestNode.h \
+    TestTank.h \
+    TestSensor.h
+
 

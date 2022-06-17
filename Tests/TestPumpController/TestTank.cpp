@@ -47,3 +47,13 @@ void TestTank::setStatus(Tank::Status s)
 {
     status = s;
 }
+
+bool TestTank::isDrainable()
+{
+    return getStatus() != Empty;
+}
+
+bool TestTank::isFillable()
+{
+    return getStatus() != Full;
+}

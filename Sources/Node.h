@@ -24,7 +24,7 @@ struct Node
     Node(Pump* pump, Tank* source, Tank* drain, Timer* timer = nullptr,
          Node* prev = nullptr, Node* next = nullptr);
 
-    State getState() const;
+    virtual State getState() const;
 
     Pump* pump;
     Tank* source;
@@ -37,20 +37,20 @@ struct Node
     /**
      * @brief Возвращает флаг - готов ли узел к перекачке
      */
-    bool canPumping();
+    virtual bool canPumping();
 
     /**
      * @brief Запустить узел в работу
      */
-    void on();
+    virtual void on();
 
     /**
      * @brief Закончить перекачку
      */
-    void finish();
+    virtual void finish();
 
     /**
      * @brief Отключить узел
      */
-    void off();
+    virtual void off();
 };

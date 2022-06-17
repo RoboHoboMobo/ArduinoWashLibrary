@@ -1,4 +1,4 @@
-#include "PumpLogicHelpers.h"
+#include "PumpControllerHelpers.h"
 
 /**
  * @param head Первый узел системы (приямок)
@@ -7,6 +7,9 @@
  */
 bool manageNodes(Node* head)
 {
+    if (!head)
+        return true;
+
     Node* current = head;
     Node* next = current->next;
 
@@ -36,6 +39,9 @@ bool manageNodes(Node* head)
  */
 bool manageNodesReverse(Node* tail)
 {
+    if (!tail)
+        return true;
+
     Node* current = tail;
     Node* prev = current->prev;
 
