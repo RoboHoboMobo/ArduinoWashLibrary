@@ -1,5 +1,10 @@
 #include "PumpLogicHelpers.h"
 
+/**
+ * @param head Первый узел системы (приямок)
+ *
+ * @return Флаг успешного выполнения
+ */
 bool manageNodes(Node* head)
 {
     Node* current = head;
@@ -24,6 +29,11 @@ bool manageNodes(Node* head)
     return true;
 }
 
+/**
+ * @param tail Последний узел системы (концентратор)
+ *
+ * @return Флаг успешного выполнения
+ */
 bool manageNodesReverse(Node* tail)
 {
     Node* current = tail;
