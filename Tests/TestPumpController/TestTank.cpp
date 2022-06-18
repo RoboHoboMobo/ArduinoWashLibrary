@@ -8,19 +8,6 @@ uint8_t levelSensorsNum{3};
 Tank::Status status{};
 }
 
-bool Tank::isFull()
-{
-    return getStatus() == Full;
-}
-
-void Tank::update()
-{
-    uint8_t n = getLevelSensorsNum();
-
-    for (uint8_t i = 0; i < n; ++i)
-        getLevelSensor(i)->update();
-}
-
 Sensor* TestTank::getLevelSensor(uint8_t number)
 {
     if (number >= levelSensorsNum)
@@ -53,10 +40,30 @@ Sensor* TestTank::getUpperLevelSensor()
 
 Tank::Status TestTank::getStatus()
 {
-    return status;
+    return m_status;
 }
 
 void TestTank::setStatus(Tank::Status s)
 {
-    status = s;
+    m_status = s;
+}
+
+void TestTank::setIsDrainable(bool flag)
+{
+    m_isDrainable = flag;
+}
+
+void TestTank::setIsFillable(bool flag)
+{
+    m_isFillable = flag;
+}
+
+bool TestTank::isDrainable()
+{
+    return m_isDrainable;
+}
+
+bool TestTank::isFillable()
+{
+    return m_isFillable;
 }

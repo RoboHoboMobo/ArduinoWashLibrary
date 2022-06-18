@@ -7,6 +7,7 @@ Timer::Timer(uint32_t duration)
     , m_begin{}
     , m_remain{duration}
     , m_end{}
+    , m_duration{duration}
 {
 }
 
@@ -72,6 +73,8 @@ void Timer::reset(uint32_t newTime)
     m_begin = 0;
     m_remain = newTime;
     m_end = 0;
+
+    m_duration = newTime;
 }
 
 Timer::State Timer::getState() const
@@ -82,4 +85,14 @@ Timer::State Timer::getState() const
 uint32_t Timer::getRemainingTime() const
 {
     return m_remain;
+}
+
+uint32_t Timer::getDuration() const
+{
+    return m_duration;
+}
+
+bool Timer::isDone() const
+{
+    return m_state == Stopped && m_remain == 0;
 }

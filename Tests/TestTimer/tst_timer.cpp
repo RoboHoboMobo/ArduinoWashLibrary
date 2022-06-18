@@ -39,6 +39,11 @@ private slots:
 
     void testReset();
     void startAfterReset();
+
+    void isDoneIfNotStarted();
+    void isDoneIfRunning();
+    void isDoneIfPaused();
+    void isDoneIfStoppendAndTimeIsOut();
 };
 
 TestTimer::TestTimer()
@@ -351,6 +356,95 @@ void TestTimer::startAfterReset()
 
     QVERIFY(t.getState() == Timer::State::Running);
     QCOMPARE(t.getRemainingTime(), 34u);
+}
+
+void TestTimer::isDoneIfNotStarted()
+{
+    Timer t(123);
+
+    MockTimerImpl::setTime(1000);
+
+    t.update();
+
+    QVERIFY(!t.isDone());
+    QCOMPARE(t.getRemainingTime(), 123u);
+
+    MockTimerImpl::setTime(2000);
+
+    t.update();
+
+    QVERIFY(!t.isDone());
+    QCOMPARE(t.getRemainingTime(), 123u);
+}
+
+void TestTimer::isDoneIfRunning()
+{
+    Timer t(123);
+
+    MockTimerImpl::setTime(1000);
+
+    t.start();
+
+    QVERIFY(!t.isDone());
+    QVERIFY(t.getState() == Timer::State::Running);
+    QCOMPARE(t.getRemainingTime(), 123u);
+
+    MockTimerImpl::setTime(1100);
+
+    t.start();
+
+    QVERIFY(!t.isDone());
+    QVERIFY(t.getState() == Timer::State::Running);
+    QCOMPARE(t.getRemainingTime(), 123u);
+}
+
+void TestTimer::isDoneIfPaused()
+{
+    Timer t(123);
+
+    MockTimerImpl::setTime(1000);
+
+    t.start();
+
+    QVERIFY(!t.isDone());
+    QVERIFY(t.getState() == Timer::State::Running);
+    QCOMPARE(t.getRemainingTime(), 123u);
+
+    MockTimerImpl::setTime(1100);
+
+    t.update();
+    t.pause();
+
+    QVERIFY(!t.isDone());
+    QVERIFY(t.getState() == Timer::State::Paused);
+    QCOMPARE(t.getRemainingTime(), 23u);
+
+    t.update();
+
+    QVERIFY(!t.isDone());
+    QVERIFY(t.getState() == Timer::State::Paused);
+    QCOMPARE(t.getRemainingTime(), 23u);
+}
+
+void TestTimer::isDoneIfStoppendAndTimeIsOut()
+{
+    Timer t(123);
+
+    MockTimerImpl::setTime(1000);
+
+    t.start();
+
+    QVERIFY(!t.isDone());
+    QVERIFY(t.getState() == Timer::State::Running);
+    QCOMPARE(t.getRemainingTime(), 123u);
+
+    MockTimerImpl::setTime(2000);
+
+    t.update();
+
+    QVERIFY(t.isDone());
+    QVERIFY(t.getState() == Timer::State::Stopped);
+    QCOMPARE(t.getRemainingTime(), 0u);
 }
 
 QTEST_APPLESS_MAIN(TestTimer)

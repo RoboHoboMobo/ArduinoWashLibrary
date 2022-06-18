@@ -4,11 +4,14 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        Node.cpp \
         PinImpl.cpp \
         Pump.cpp \
+        PumpController.cpp \
+        PumpControllerHelpers.cpp \
         Sensors.cpp \
         SensorsImpl.cpp \
-        Tanks.cpp \
+        Tank.cpp \
         Timer.cpp \
         TimerImpl.cpp \
         main.cpp
@@ -16,12 +19,15 @@ SOURCES += \
 HEADERS += \
     ArduinoButton.h \
     Common.h \
+    Node.h \
     PinImpl.h \
     Pump.h \
     PumpController.h \
+    PumpControllerHelpers.h \
     Sensors.h \
     SensorsImpl.h \
     SensorsImplDef.h \
-    Tanks.h \
+    States.h \
+    Tank.h \
     Timer.h \
     TimerImpl.h

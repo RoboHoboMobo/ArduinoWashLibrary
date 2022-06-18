@@ -26,10 +26,15 @@ public:
     State getState() const;
     uint32_t getRemainingTime() const;
 
+    uint32_t getDuration() const;
+    bool isDone() const;
+
 private:
     State m_state;
 
     uint32_t m_begin;
     uint32_t m_remain;
     uint32_t m_end;
+
+    uint32_t m_duration;
 };
