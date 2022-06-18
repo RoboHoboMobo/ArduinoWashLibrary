@@ -94,5 +94,5 @@ uint32_t Timer::getDuration() const
 
 bool Timer::isDone() const
 {
-    return Stopped && m_remain == 0;
+    return m_state == Stopped && m_remain == 0;
 }
