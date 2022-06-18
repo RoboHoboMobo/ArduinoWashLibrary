@@ -2,9 +2,9 @@
 
 #include "PumpController.h"
 
-#include "TestNode.h"
-
 #include "TestTank.h"
+
+#include "MockTimer.h"
 
 class TestPumpController : public QObject
 {
@@ -15,14 +15,23 @@ public:
     ~TestPumpController();
 
 private slots:
-    void testReverse000();
-    void testReverse001();
-    void testReverse010();
-    void testReverse011();
-    void testReverse100();
-    void testReverse101();
-    void testReverse110();
-    void testReverse111();
+    void testForward1000();
+    void testForward1001();
+    void testForward1010();
+    void testForward1011();
+    void testForward1100();
+    void testForward1101();
+    void testForward1110();
+    void testForward1111();
+
+    void testReverse0000();
+    void testReverse0001();
+    void testReverse0010();
+    void testReverse0011();
+    void testReverse0100();
+    void testReverse0101();
+    void testReverse0110();
+    void testReverse0111();
 };
 
 TestPumpController::TestPumpController()
@@ -33,385 +42,875 @@ TestPumpController::~TestPumpController()
 {
 }
 
-void TestPumpController::testReverse000()
+void TestPumpController::testForward1000()
 {
-    TestTank t0;
-    TestTank t1;
-    TestTank t2;
-    TestTank t3;
-    TestTank t4;
+    PumpController pc;
+
+    TestTank tank0;
+
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
+
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
+
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
 
     Pump p01(0);
+    p01.on();
+
     Pump p12(1);
     Pump p23(2);
     Pump p34(3);
 
-    TestNode n0{&p01, &t0, &t1};
-    TestNode n1{&p12, &t1, &t2};
-    TestNode n2{&p23, &t2, &t3};
-    TestNode n3{&p34, &t3, &t4};
+    Timer t0(999);
+    Timer t1(0);
+    Timer t2(0);
+    Timer t3(0);
 
-    PumpController pc;
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
     pc.pushBack(&n0);
     pc.pushBack(&n1);
     pc.pushBack(&n2);
     pc.pushBack(&n3);
 
-    n0.reset();
-    n1.reset();
-    n2.reset();
-    n3.reset();
+    pc.operate();
 
-    n0.setGetState(Node::WaterIsReady);
-    n0.setCanPumping(true);
-
-    n1.setGetState(Node::WaterIsReady);
-    n1.setCanPumping(true);
-
-    n2.setGetState(Node::WaterIsReady);
-    n2.setCanPumping(true);
-
-    n3.setGetState(Node::WaterIsReady);
-    n3.setCanPumping(true);
-
-    pc.operate(true);
-
-    QVERIFY(n1.getState() == Node::PumpOn);
-    QVERIFY(n2.getState() == Node::PumpOff);
-    QVERIFY(n3.getState() == Node::PumpOn);
+    QVERIFY(n0.getState() == Node::PumpOn);
+    QVERIFY(n1.getState() == Node::WaterIsReady);
+    QVERIFY(n2.getState() == Node::PumpOn);
+    QVERIFY(n3.getState() == Node::WaterIsReady);
 }
 
-void TestPumpController::testReverse001()
+void TestPumpController::testForward1001()
 {
-    TestTank t0;
-    TestTank t1;
-    TestTank t2;
-    TestTank t3;
-    TestTank t4;
+    PumpController pc;
+
+    TestTank tank0;
+
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
+
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
+
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
 
     Pump p01(0);
+    p01.on();
+
     Pump p12(1);
     Pump p23(2);
     Pump p34(3);
+    p34.on();
 
-    TestNode n0{&p01, &t0, &t1};
-    TestNode n1{&p12, &t1, &t2};
-    TestNode n2{&p23, &t2, &t3};
-    TestNode n3{&p34, &t3, &t4};
+    Timer t0(999);
+    Timer t1(0);
+    Timer t2(0);
+    Timer t3(999);
 
-    PumpController pc;
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
     pc.pushBack(&n0);
     pc.pushBack(&n1);
     pc.pushBack(&n2);
     pc.pushBack(&n3);
 
-    n0.reset();
-    n1.reset();
-    n2.reset();
-    n3.reset();
+    pc.operate();
 
-    n0.setGetState(Node::WaterIsReady);
-    n0.setCanPumping(true);
-
-    n1.setGetState(Node::WaterIsReady);
-    n1.setCanPumping(true);
-
-    n2.setGetState(Node::WaterIsReady);
-    n2.setCanPumping(true);
-
-    n3.setGetState(Node::PumpOn);
-    n3.setCanPumping(true);
-
-    pc.operate(true);
-
-    QVERIFY(n1.getState() == Node::PumpOn);
-    QVERIFY(n2.getState() == Node::PumpOff);
-    QVERIFY(n3.getState() == Node::PumpOn);
-}
-
-void TestPumpController::testReverse010()
-{
-    TestTank t0;
-    TestTank t1;
-    TestTank t2;
-    TestTank t3;
-    TestTank t4;
-
-    Pump p01(0);
-    Pump p12(1);
-    Pump p23(2);
-    Pump p34(3);
-
-    TestNode n0{&p01, &t0, &t1};
-    TestNode n1{&p12, &t1, &t2};
-    TestNode n2{&p23, &t2, &t3};
-    TestNode n3{&p34, &t3, &t4};
-
-    PumpController pc;
-    pc.pushBack(&n0);
-    pc.pushBack(&n1);
-    pc.pushBack(&n2);
-    pc.pushBack(&n3);
-
-    n0.reset();
-    n1.reset();
-    n2.reset();
-    n3.reset();
-
-    n0.setGetState(Node::WaterIsReady);
-    n0.setCanPumping(true);
-
-    n1.setGetState(Node::WaterIsReady);
-    n1.setCanPumping(true);
-
-    n2.setGetState(Node::PumpOn);
-    n2.setCanPumping(true);
-
-    n3.setGetState(Node::WaterIsReady);
-    n3.setCanPumping(true);
-
-    pc.operate(true);
-
-    QVERIFY(n1.getState() == Node::PumpOff);
+    QVERIFY(n0.getState() == Node::PumpOn);
+    QVERIFY(n1.getState() == Node::WaterIsReady);
     QVERIFY(n2.getState() == Node::PumpOn);
     QVERIFY(n3.getState() == Node::PumpOff);
 }
 
-void TestPumpController::testReverse011()
+void TestPumpController::testForward1010()
 {
-    TestTank t0;
-    TestTank t1;
-    TestTank t2;
-    TestTank t3;
-    TestTank t4;
+    PumpController pc;
+
+    TestTank tank0;
+
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
+
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
+
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
 
     Pump p01(0);
+    p01.on();
+
     Pump p12(1);
+
     Pump p23(2);
+    p23.on();
+
     Pump p34(3);
 
-    TestNode n0{&p01, &t0, &t1};
-    TestNode n1{&p12, &t1, &t2};
-    TestNode n2{&p23, &t2, &t3};
-    TestNode n3{&p34, &t3, &t4};
+    Timer t0(999);
+    Timer t1(0);
+    Timer t2(999);
+    Timer t3(0);
 
-    PumpController pc;
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
     pc.pushBack(&n0);
     pc.pushBack(&n1);
     pc.pushBack(&n2);
     pc.pushBack(&n3);
 
-    n0.reset();
-    n1.reset();
-    n2.reset();
-    n3.reset();
+    pc.operate();
 
-    n0.setGetState(Node::WaterIsReady);
-    n0.setCanPumping(true);
+    QVERIFY(n0.getState() == Node::PumpOn);
+    QVERIFY(n1.getState() == Node::WaterIsReady);
+    QVERIFY(n2.getState() == Node::PumpOn);
+    QVERIFY(n3.getState() == Node::WaterIsReady);
+}
 
-    n1.setGetState(Node::WaterIsReady);
-    n1.setCanPumping(true);
+void TestPumpController::testForward1011()
+{
+    PumpController pc;
 
-    n2.setGetState(Node::PumpOn);
-    n2.setCanPumping(true);
+    TestTank tank0;
 
-    n3.setGetState(Node::PumpOn);
-    n3.setCanPumping(true);
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
 
-    pc.operate(true);
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
 
-    QVERIFY(n1.getState() == Node::PumpOff);
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
+
+    Pump p01(0);
+    p01.on();
+
+    Pump p12(1);
+
+    Pump p23(2);
+    p23.on();
+
+    Pump p34(3);
+    p34.on();
+
+    Timer t0(999);
+    Timer t1(0);
+    Timer t2(999);
+    Timer t3(999);
+
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
+    pc.pushBack(&n0);
+    pc.pushBack(&n1);
+    pc.pushBack(&n2);
+    pc.pushBack(&n3);
+
+    pc.operate();
+
+    QVERIFY(n0.getState() == Node::PumpOn);
+    QVERIFY(n1.getState() == Node::WaterIsReady);
     QVERIFY(n2.getState() == Node::PumpOn);
     QVERIFY(n3.getState() == Node::PumpOff);
 }
 
-void TestPumpController::testReverse100()
+void TestPumpController::testForward1100()
 {
-    TestTank t0;
-    TestTank t1;
-    TestTank t2;
-    TestTank t3;
-    TestTank t4;
+    PumpController pc;
+
+    TestTank tank0;
+
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
+
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
+
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
 
     Pump p01(0);
+    p01.on();
+
     Pump p12(1);
+    p12.on();
+
     Pump p23(2);
     Pump p34(3);
 
-    TestNode n0{&p01, &t0, &t1};
-    TestNode n1{&p12, &t1, &t2};
-    TestNode n2{&p23, &t2, &t3};
-    TestNode n3{&p34, &t3, &t4};
+    Timer t0(999);
+    Timer t1(999);
+    Timer t2(0);
+    Timer t3(0);
 
-    PumpController pc;
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
     pc.pushBack(&n0);
     pc.pushBack(&n1);
     pc.pushBack(&n2);
     pc.pushBack(&n3);
 
-    n0.reset();
-    n1.reset();
-    n2.reset();
-    n3.reset();
+    pc.operate();
 
-    n0.setGetState(Node::WaterIsReady);
-    n0.setCanPumping(true);
-
-    n1.setGetState(Node::PumpOn);
-    n1.setCanPumping(true);
-
-    n2.setGetState(Node::WaterIsReady);
-    n2.setCanPumping(true);
-
-    n3.setGetState(Node::WaterIsReady);
-    n3.setCanPumping(true);
-
-    pc.operate(true);
-
-    QVERIFY(n1.getState() == Node::PumpOn);
-    QVERIFY(n2.getState() == Node::PumpOff);
+    QVERIFY(n0.getState() == Node::PumpOn);
+    QVERIFY(n1.getState() == Node::PumpOff);
+    QVERIFY(n2.getState() == Node::WaterIsReady);
     QVERIFY(n3.getState() == Node::PumpOn);
 }
 
-void TestPumpController::testReverse101()
+void TestPumpController::testForward1101()
 {
-    TestTank t0;
-    TestTank t1;
-    TestTank t2;
-    TestTank t3;
-    TestTank t4;
+    PumpController pc;
+
+    TestTank tank0;
+
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
+
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
+
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
 
     Pump p01(0);
+    p01.on();
+
     Pump p12(1);
+    p12.on();
+
     Pump p23(2);
     Pump p34(3);
+    p34.on();
 
-    TestNode n0{&p01, &t0, &t1};
-    TestNode n1{&p12, &t1, &t2};
-    TestNode n2{&p23, &t2, &t3};
-    TestNode n3{&p34, &t3, &t4};
+    Timer t0(999);
+    Timer t1(999);
+    Timer t2(0);
+    Timer t3(999);
 
-    PumpController pc;
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
     pc.pushBack(&n0);
     pc.pushBack(&n1);
     pc.pushBack(&n2);
     pc.pushBack(&n3);
 
-    n0.reset();
-    n1.reset();
-    n2.reset();
-    n3.reset();
+    pc.operate();
 
-    n0.setGetState(Node::WaterIsReady);
-    n0.setCanPumping(true);
-
-    n1.setGetState(Node::PumpOn);
-    n1.setCanPumping(true);
-
-    n2.setGetState(Node::WaterIsReady);
-    n2.setCanPumping(true);
-
-    n3.setGetState(Node::PumpOn);
-    n3.setCanPumping(true);
-
-    pc.operate(true);
-
-    QVERIFY(n1.getState() == Node::PumpOn);
-    QVERIFY(n2.getState() == Node::PumpOff);
+    QVERIFY(n0.getState() == Node::PumpOn);
+    QVERIFY(n1.getState() == Node::PumpOff);
+    QVERIFY(n2.getState() == Node::WaterIsReady);
     QVERIFY(n3.getState() == Node::PumpOn);
 }
 
-void TestPumpController::testReverse110()
+void TestPumpController::testForward1110()
 {
-    TestTank t0;
-    TestTank t1;
-    TestTank t2;
-    TestTank t3;
-    TestTank t4;
+    PumpController pc;
+
+    TestTank tank0;
+
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
+
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
+
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
 
     Pump p01(0);
+    p01.on();
+
     Pump p12(1);
+    p12.on();
+
     Pump p23(2);
+    p23.on();
+
     Pump p34(3);
 
-    TestNode n0{&p01, &t0, &t1};
-    TestNode n1{&p12, &t1, &t2};
-    TestNode n2{&p23, &t2, &t3};
-    TestNode n3{&p34, &t3, &t4};
+    Timer t0(999);
+    Timer t1(999);
+    Timer t2(999);
+    Timer t3(000);
 
-    PumpController pc;
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
     pc.pushBack(&n0);
     pc.pushBack(&n1);
     pc.pushBack(&n2);
     pc.pushBack(&n3);
 
-    n0.reset();
-    n1.reset();
-    n2.reset();
-    n3.reset();
+    pc.operate();
 
-    n0.setGetState(Node::WaterIsReady);
-    n0.setCanPumping(true);
+    QVERIFY(n0.getState() == Node::PumpOn);
+    QVERIFY(n1.getState() == Node::PumpOff);
+    QVERIFY(n2.getState() == Node::PumpOff);
+    QVERIFY(n3.getState() == Node::WaterIsReady);
+}
 
-    n1.setGetState(Node::PumpOn);
-    n1.setCanPumping(true);
+void TestPumpController::testForward1111()
+{
+    PumpController pc;
 
-    n2.setGetState(Node::PumpOn);
-    n2.setCanPumping(true);
+    TestTank tank0;
 
-    n3.setGetState(Node::WaterIsReady);
-    n3.setCanPumping(true);
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
 
-    pc.operate(true);
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
 
-    QVERIFY(n1.getState() == Node::PumpOn);
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
+
+    Pump p01(0);
+    p01.on();
+
+    Pump p12(1);
+    p12.on();
+
+    Pump p23(2);
+    p23.on();
+
+    Pump p34(3);
+    p34.on();
+
+    Timer t0(999);
+    Timer t1(999);
+    Timer t2(999);
+    Timer t3(999);
+
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
+    pc.pushBack(&n0);
+    pc.pushBack(&n1);
+    pc.pushBack(&n2);
+    pc.pushBack(&n3);
+
+    pc.operate();
+
+    QVERIFY(n0.getState() == Node::PumpOn);
+    QVERIFY(n1.getState() == Node::PumpOff);
     QVERIFY(n2.getState() == Node::PumpOff);
     QVERIFY(n3.getState() == Node::PumpOff);
 }
 
-void TestPumpController::testReverse111()
+void TestPumpController::testReverse0000()
 {
-    TestTank t0;
-    TestTank t1;
-    TestTank t2;
-    TestTank t3;
-    TestTank t4;
+    PumpController pc;
+
+    TestTank tank0;
+    tank0.setIsDrainable(true);
+    tank0.setIsFillable(true);
+
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
+
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
+
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
 
     Pump p01(0);
     Pump p12(1);
     Pump p23(2);
     Pump p34(3);
 
-    TestNode n0{&p01, &t0, &t1};
-    TestNode n1{&p12, &t1, &t2};
-    TestNode n2{&p23, &t2, &t3};
-    TestNode n3{&p34, &t3, &t4};
+    Timer t0(0);
+    Timer t1(0);
+    Timer t2(0);
+    Timer t3(0);
 
-    PumpController pc;
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
     pc.pushBack(&n0);
     pc.pushBack(&n1);
     pc.pushBack(&n2);
     pc.pushBack(&n3);
 
-    n0.reset();
-    n1.reset();
-    n2.reset();
-    n3.reset();
+    pc.operate(true);
 
-    n0.setGetState(Node::WaterIsReady);
-    n0.setCanPumping(true);
+    QVERIFY(n0.getState() == Node::WaterIsReady);
+    QVERIFY(n1.getState() == Node::PumpOn);
+    QVERIFY(n2.getState() == Node::WaterIsReady);
+    QVERIFY(n3.getState() == Node::PumpOn);
+}
 
-    n1.setGetState(Node::PumpOn);
-    n1.setCanPumping(true);
+void TestPumpController::testReverse0001()
+{
+    PumpController pc;
 
-    n2.setGetState(Node::PumpOn);
-    n2.setCanPumping(true);
+    TestTank tank0;
+    tank0.setIsDrainable(true);
+    tank0.setIsFillable(true);
 
-    n3.setGetState(Node::PumpOn);
-    n3.setCanPumping(true);
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
+
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
+
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
+
+    Pump p01(0);
+    Pump p12(1);
+    Pump p23(2);
+    Pump p34(3);
+    p34.on();
+
+    Timer t0(0);
+    Timer t1(0);
+    Timer t2(0);
+    Timer t3(999);
+
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
+    pc.pushBack(&n0);
+    pc.pushBack(&n1);
+    pc.pushBack(&n2);
+    pc.pushBack(&n3);
 
     pc.operate(true);
 
+    QVERIFY(n0.getState() == Node::WaterIsReady);
+    QVERIFY(n1.getState() == Node::PumpOn);
+    QVERIFY(n2.getState() == Node::WaterIsReady);
+    QVERIFY(n3.getState() == Node::PumpOn);
+}
+
+void TestPumpController::testReverse0010()
+{
+    PumpController pc;
+
+    TestTank tank0;
+    tank0.setIsDrainable(true);
+    tank0.setIsFillable(true);
+
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
+
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
+
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
+
+    Pump p01(0);
+    Pump p12(1);
+    Pump p23(2);
+    p23.on();
+
+    Pump p34(3);
+
+    Timer t0(0);
+    Timer t1(0);
+    Timer t2(999);
+    Timer t3(0);
+
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
+    pc.pushBack(&n0);
+    pc.pushBack(&n1);
+    pc.pushBack(&n2);
+    pc.pushBack(&n3);
+
+    pc.operate(true);
+
+    QVERIFY(n0.getState() == Node::WaterIsReady);
+    QVERIFY(n1.getState() == Node::WaterIsReady);
+    QVERIFY(n2.getState() == Node::PumpOn);
+    QVERIFY(n3.getState() == Node::WaterIsReady);
+}
+
+void TestPumpController::testReverse0011()
+{
+    PumpController pc;
+
+    TestTank tank0;
+    tank0.setIsDrainable(true);
+    tank0.setIsFillable(true);
+
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
+
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
+
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
+
+    Pump p01(0);
+    Pump p12(1);
+    Pump p23(2);
+    p23.on();
+
+    Pump p34(3);
+    p34.on();
+
+    Timer t0(0);
+    Timer t1(0);
+    Timer t2(999);
+    Timer t3(999);
+
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
+    pc.pushBack(&n0);
+    pc.pushBack(&n1);
+    pc.pushBack(&n2);
+    pc.pushBack(&n3);
+
+    pc.operate(true);
+
+    QVERIFY(n0.getState() == Node::WaterIsReady);
+    QVERIFY(n1.getState() == Node::WaterIsReady);
+    QVERIFY(n2.getState() == Node::PumpOn);
+    QVERIFY(n3.getState() == Node::PumpOff);
+}
+
+void TestPumpController::testReverse0100()
+{
+    PumpController pc;
+
+    TestTank tank0;
+    tank0.setIsDrainable(true);
+    tank0.setIsFillable(true);
+
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
+
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
+
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
+
+    Pump p01(0);
+    Pump p12(1);
+    p12.on();
+
+    Pump p23(2);
+    Pump p34(3);
+
+    Timer t0(0);
+    Timer t1(999);
+    Timer t2(0);
+    Timer t3(0);
+
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
+    pc.pushBack(&n0);
+    pc.pushBack(&n1);
+    pc.pushBack(&n2);
+    pc.pushBack(&n3);
+
+    pc.operate(true);
+
+    QVERIFY(n0.getState() == Node::WaterIsReady);
+    QVERIFY(n1.getState() == Node::PumpOn);
+    QVERIFY(n2.getState() == Node::WaterIsReady);
+    QVERIFY(n3.getState() == Node::PumpOn);
+}
+
+void TestPumpController::testReverse0101()
+{
+    PumpController pc;
+
+    TestTank tank0;
+    tank0.setIsDrainable(true);
+    tank0.setIsFillable(true);
+
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
+
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
+
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
+
+    Pump p01(0);
+    Pump p12(1);
+    p12.on();
+
+    Pump p23(2);
+    Pump p34(3);
+    p34.on();
+
+    Timer t0(0);
+    Timer t1(999);
+    Timer t2(0);
+    Timer t3(999);
+
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
+    pc.pushBack(&n0);
+    pc.pushBack(&n1);
+    pc.pushBack(&n2);
+    pc.pushBack(&n3);
+
+    pc.operate(true);
+
+    QVERIFY(n0.getState() == Node::WaterIsReady);
+    QVERIFY(n1.getState() == Node::PumpOn);
+    QVERIFY(n2.getState() == Node::WaterIsReady);
+    QVERIFY(n3.getState() == Node::PumpOn);
+}
+
+void TestPumpController::testReverse0110()
+{
+    PumpController pc;
+
+    TestTank tank0;
+    tank0.setIsDrainable(true);
+    tank0.setIsFillable(true);
+
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
+
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
+
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
+
+    Pump p01(0);
+    Pump p12(1);
+    p12.on();
+
+    Pump p23(2);
+    p23.on();
+
+    Pump p34(3);
+
+    Timer t0(0);
+    Timer t1(999);
+    Timer t2(999);
+    Timer t3(0);
+
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
+    pc.pushBack(&n0);
+    pc.pushBack(&n1);
+    pc.pushBack(&n2);
+    pc.pushBack(&n3);
+
+    pc.operate(true);
+
+    QVERIFY(n0.getState() == Node::WaterIsReady);
+    QVERIFY(n1.getState() == Node::PumpOn);
+    QVERIFY(n2.getState() == Node::PumpOff);
+    QVERIFY(n3.getState() == Node::WaterIsReady);
+}
+
+void TestPumpController::testReverse0111()
+{
+    PumpController pc;
+
+    TestTank tank0;
+    tank0.setIsDrainable(true);
+    tank0.setIsFillable(true);
+
+    TestTank tank1;
+    tank1.setIsDrainable(true);
+    tank1.setIsFillable(true);
+
+    TestTank tank2;
+    tank2.setIsDrainable(true);
+    tank2.setIsFillable(true);
+
+    TestTank tank3;
+    tank3.setIsDrainable(true);
+    tank3.setIsFillable(true);
+
+    TestTank tank4;
+    tank4.setIsDrainable(true);
+    tank4.setIsFillable(true);
+
+    Pump p01(0);
+    Pump p12(1);
+    p12.on();
+
+    Pump p23(2);
+    p23.on();
+
+    Pump p34(3);
+    p34.on();
+
+    Timer t0(0);
+    Timer t1(999);
+    Timer t2(999);
+    Timer t3(999);
+
+    Node n0{&p01, &tank0, &tank1, &t0};
+    Node n1{&p12, &tank1, &tank2, &t1};
+    Node n2{&p23, &tank2, &tank3, &t2};
+    Node n3{&p34, &tank3, &tank4, &t3};
+
+    pc.pushBack(&n0);
+    pc.pushBack(&n1);
+    pc.pushBack(&n2);
+    pc.pushBack(&n3);
+
+    pc.operate(true);
+
+    QVERIFY(n0.getState() == Node::WaterIsReady);
     QVERIFY(n1.getState() == Node::PumpOn);
     QVERIFY(n2.getState() == Node::PumpOff);
     QVERIFY(n3.getState() == Node::PumpOff);

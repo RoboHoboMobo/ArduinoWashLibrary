@@ -16,7 +16,6 @@ void Pump::on()
 
     switchPinOn(m_pin);
     m_isOn = true;
-
 }
 
 void Pump::off()

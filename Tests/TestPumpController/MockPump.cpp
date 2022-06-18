@@ -8,10 +8,12 @@ Pump::Pump(uint8_t pin, bool isOn)
 
 void Pump::on()
 {
+    m_isOn = true;
 }
 
 void Pump::off()
 {
+    m_isOn = false;
 }
 
 uint8_t Pump::getPin() const

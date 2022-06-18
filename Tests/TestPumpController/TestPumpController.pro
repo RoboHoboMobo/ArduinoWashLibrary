@@ -11,24 +11,21 @@ INCLUDEPATH += $$prefix
 SOURCES += tst_pumpcontroller.cpp \
     $$prefix/PumpController.cpp \
     $$prefix/PumpControllerHelpers.cpp \
-    $$prefix/Tank.cpp \
-    MockNode.cpp \
+    $$prefix/Node.cpp \
     MockPump.cpp \
-    TestNode.cpp \
+    $$prefix/Tank.cpp \
     TestTank.cpp \
-    TestSensor.cpp
+    TestSensor.cpp \
+    MockTimer.cpp
 
 HEADERS += $$prefix/PumpController.h \
     $$prefix/PumpControllerHelpers.h \
     $$prefix/Node.h \
-    $$prefix/Pump.h \
-    $$prefix/Timer.h \
-    $$prefix/Tank.h \
-    $$prefix/Sensors.h \
-    MockNode.h \
     MockPump.h \
-    TestNode.h \
+    $$prefix/Tank.h \
     TestTank.h \
-    TestSensor.h
+    TestSensor.h \
+    $$prefix/Timer.h \
+    MockTimer.h
 
 

@@ -40,20 +40,30 @@ Sensor* TestTank::getUpperLevelSensor()
 
 Tank::Status TestTank::getStatus()
 {
-    return status;
+    return m_status;
 }
 
 void TestTank::setStatus(Tank::Status s)
 {
-    status = s;
+    m_status = s;
+}
+
+void TestTank::setIsDrainable(bool flag)
+{
+    m_isDrainable = flag;
+}
+
+void TestTank::setIsFillable(bool flag)
+{
+    m_isFillable = flag;
 }
 
 bool TestTank::isDrainable()
 {
-    return getStatus() != Empty;
+    return m_isDrainable;
 }
 
 bool TestTank::isFillable()
 {
-    return getStatus() != Full;
+    return m_isFillable;
 }
