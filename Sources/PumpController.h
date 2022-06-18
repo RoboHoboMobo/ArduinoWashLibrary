@@ -45,6 +45,11 @@ public:
      */
     bool operate(bool needReverse = false);
 
+    /**
+     * @brief Обновить узлы
+     */
+    void update();
+
 private:
     Node* m_head;
     Node* m_tail;

@@ -37,20 +37,25 @@ struct Node
     /**
      * @brief Возвращает флаг - готов ли узел к перекачке
      */
-    virtual bool canPumping();
+    bool canPumping();
 
     /**
      * @brief Запустить узел в работу
      */
-    virtual void on();
+    void on();
 
     /**
      * @brief Закончить перекачку
      */
-    virtual void finish();
+    void finish();
 
     /**
      * @brief Отключить узел
      */
-    virtual void off();
+    void off();
+
+    /**
+     * @brief Обновить узел
+     */
+    void update();
 };

@@ -88,3 +88,14 @@ bool PumpController::operate(bool needReverse)
 
     return manageNodes(m_head);
 }
+
+void PumpController::update()
+{
+    Node* current = m_head;
+
+    while (current) {
+        current->update();
+
+        current = current->next;
+    }
+}

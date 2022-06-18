@@ -14,6 +14,9 @@ bool manageNodes(Node* head)
     Node* next = current->next;
 
     while (next) {
+        current->update();
+        next->update();
+
         Node::State currentState = current->getState();
         Node::State nextState = next->getState();
 
@@ -46,6 +49,9 @@ bool manageNodesReverse(Node* tail)
     Node* prev = current->prev;
 
     while (prev) {
+        current->update();
+        prev->update();
+
         Node::State currentState = current->getState();
         Node::State prevState = prev->getState();
 

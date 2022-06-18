@@ -57,3 +57,11 @@ void Node::off()
         timer->reset(timer->getDuration());
 }
 
+void Node::update()
+{
+    source->update();
+    drain->update();
+
+    if (timer)
+        timer->update();
+}
