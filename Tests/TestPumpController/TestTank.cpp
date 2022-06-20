@@ -4,7 +4,8 @@ namespace {
 TestSensor s0{0};
 TestSensor s1{123};
 TestSensor s2{1};
-uint8_t levelSensorsNum{3};
+const uint8_t levelSensorsNum{3};
+Sensor* sensors[levelSensorsNum] = {&s0, &s1, &s2};
 Tank::Status status{};
 }
 
@@ -21,6 +22,11 @@ Sensor* TestTank::getLevelSensor(uint8_t number)
         return &s2;
 
     return nullptr;
+}
+
+Sensor** TestTank::getLevelSensors()
+{
+    return sensors;
 }
 
 uint8_t TestTank::getLevelSensorsNum() const

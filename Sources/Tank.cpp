@@ -14,6 +14,12 @@ bool Tank::isFillable()
     return getStatus() != Full;
 }
 
+bool Tank::isEmpty()
+{
+    return getStatus() == Empty;
+}
+
+
 bool Tank::isFull()
 {
     return getStatus() == Full;
@@ -22,7 +28,8 @@ bool Tank::isFull()
 void Tank::update()
 {
     uint8_t n = getLevelSensorsNum();
+    Sensor** sensors = getLevelSensors();
 
     for (uint8_t i = 0; i < n; ++i)
-        getLevelSensor(i)->update();
+        sensors[i]->update();
 }

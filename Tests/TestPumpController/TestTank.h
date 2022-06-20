@@ -8,6 +8,7 @@ class TestTank : public Tank
 {
 public:
     Sensor* getLevelSensor(uint8_t number) override;
+    Sensor** getLevelSensors() override;
     uint8_t getLevelSensorsNum() const override;
     Status getStatus() override;
 

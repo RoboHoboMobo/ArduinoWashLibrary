@@ -3,7 +3,7 @@
 #include "Sensors.h"
 
 /**
- * @brief Base class for reservoirs
+ * @brief Базовый класс резервуара
  */
 class Tank
 {
@@ -20,6 +20,11 @@ public:
      * @brief Возвращает датчик согласно его номеру (отсчет начинается снизу)
      */
     virtual Sensor* getLevelSensor(uint8_t number) = 0;
+
+    /**
+     * @brief Возвращает массив указателей на датчики
+     */
+    virtual Sensor** getLevelSensors() = 0;
 
     /**
      * @brief Возвращает число датчиков уровня в резервуаре
@@ -49,7 +54,12 @@ public:
     /**
      * @brief Возвращает флаг - можно ли закачивать в резервуар
      */
-    virtual bool isFillable();  ///< Можно наполнять
+    virtual bool isFillable();
+
+    /**
+     * @brief Возвращает флаг пустоты резервуара
+     */
+    bool isEmpty();
 
     /**
      * @brief Возвращает флаг заполненности резервуара

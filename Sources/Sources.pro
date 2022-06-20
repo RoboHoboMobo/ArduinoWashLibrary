@@ -12,6 +12,7 @@ SOURCES += \
         Sensors.cpp \
         SensorsImpl.cpp \
         Tank.cpp \
+        TestTank.cpp \
         Timer.cpp \
         TimerImpl.cpp \
         main.cpp
@@ -29,5 +30,6 @@ HEADERS += \
     SensorsImplDef.h \
     States.h \
     Tank.h \
+    TestTank.h \
     Timer.h \
     TimerImpl.h
