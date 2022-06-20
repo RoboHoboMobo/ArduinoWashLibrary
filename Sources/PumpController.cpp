@@ -10,6 +10,9 @@ PumpController::PumpController(Node* node)
 
 void PumpController::pushFront(Node* node)
 {
+    if (!node)
+        return;
+
     if (!m_head && !m_tail)
     {
         m_tail = node;
@@ -32,6 +35,9 @@ void PumpController::pushFront(Node* node)
 
 void PumpController::pushBack(Node* node)
 {
+    if (!node)
+        return;
+
     if (!m_head && !m_tail)
     {
         m_tail = node;
@@ -54,6 +60,9 @@ void PumpController::pushBack(Node* node)
 
 void PumpController::popFront()
 {
+    if (!m_head)
+        return;
+
     m_head = m_head->next;
 
     m_head->prev = {};
@@ -61,6 +70,9 @@ void PumpController::popFront()
 
 void PumpController::popBack()
 {
+    if (!m_tail)
+        return;
+
     m_tail = m_tail->prev;
 
     m_tail->next = {};
