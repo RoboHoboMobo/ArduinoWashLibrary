@@ -44,6 +44,8 @@ private slots:
     void isDoneIfRunning();
     void isDoneIfPaused();
     void isDoneIfStoppendAndTimeIsOut();
+
+    void testIsDone();
 };
 
 TestTimer::TestTimer()
@@ -445,6 +447,33 @@ void TestTimer::isDoneIfStoppendAndTimeIsOut()
     QVERIFY(t.isDone());
     QVERIFY(t.getState() == Timer::State::Stopped);
     QCOMPARE(t.getRemainingTime(), 0u);
+}
+
+void TestTimer::testIsDone()
+{
+    Timer t(123, true);
+
+    MockTimerImpl::setTime(1000);
+
+    QVERIFY(t.isDone());
+    QVERIFY(t.getState() == Timer::State::Stopped);
+    QCOMPARE(t.getRemainingTime(), 0u);
+
+    t.start();
+
+    MockTimerImpl::setTime(2000);
+
+    t.update();
+
+    QVERIFY(t.isDone());
+    QVERIFY(t.getState() == Timer::State::Stopped);
+    QCOMPARE(t.getRemainingTime(), 0u);
+
+    t.reset(t.getDuration());
+
+    QVERIFY(!t.isDone());
+    QVERIFY(t.getState() == Timer::State::Stopped);
+    QCOMPARE(t.getRemainingTime(), 123u);
 }
 
 QTEST_APPLESS_MAIN(TestTimer)

@@ -8,9 +8,11 @@ Node::Node(Pump* pump, Tank* source, Tank* drain, Timer* timer, Node* prev, Node
     , prev{prev}
     , next{next}
 {
+#if ON_ARDUINO == 0
     assert(pump);
     assert(source);
     assert(drain);
+#endif
 }
 
 Node::State Node::getState() const

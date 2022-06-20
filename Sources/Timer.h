@@ -13,7 +13,7 @@ public:
         Paused
     };
 
-    Timer(uint32_t duration);
+    Timer(uint32_t duration, bool isDone = false);
 
     State start();
     State stop();

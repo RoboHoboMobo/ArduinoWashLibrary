@@ -21,12 +21,12 @@ public:
 class FloatLevelSensor : public BinarySensor
 {
 public:
-    FloatLevelSensor(uint8_t pin);
+    FloatLevelSensor(uint8_t pin, bool isPulledUp = true);
 
     uint8_t getPin() const override;
     bool getData() override;
     void update() override;
 
 private:
-    EncButton<EB_TICK> m_btn;
+    EncButton2<EB_BTN> m_btn;
 };

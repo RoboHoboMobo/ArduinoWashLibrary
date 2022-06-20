@@ -2,10 +2,10 @@
 
 #include "TimerImpl.h"
 
-Timer::Timer(uint32_t duration)
+Timer::Timer(uint32_t duration, bool isDone)
     : m_state{Stopped}
     , m_begin{}
-    , m_remain{duration}
+    , m_remain{isDone ? 0 : duration}
     , m_end{}
     , m_duration{duration}
 {

@@ -1,6 +1,6 @@
 #include "MockTimer.h"
 
-Timer::Timer(uint32_t remain)
+Timer::Timer(uint32_t remain, bool)
     : m_state{Stopped}
     , m_begin{}
     , m_remain{remain}

@@ -2,7 +2,7 @@
 
 uint32_t updateTime()
 {
-#if ARDUINO == 1
+#if ON_ARDUINO == 1
     return millis();
 #endif
 

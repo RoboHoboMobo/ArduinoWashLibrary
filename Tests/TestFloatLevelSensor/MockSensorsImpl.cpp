@@ -1,7 +1,7 @@
 #include "MockSensorsImpl.h"
 
-template bool getFloatLevelSensorData<0>(EncButton<0>& arduinoButton);
-template uint8_t updateFloatLevelSensorData<0>(EncButton<0>& arduinoButton);
+template bool getFloatLevelSensorData<1>(EncButton2<1>& arduinoButton);
+template uint8_t updateFloatLevelSensorData<1>(EncButton2<1>& arduinoButton);
 
 namespace {
 
@@ -20,14 +20,14 @@ bool MockSensorsImpl::isUpdated()
     return isUpdatedFlag;
 }
 
-template <uint8_t mode>
-bool getFloatLevelSensorData(EncButton<mode>&)
+template <uint8_t type, uint8_t mode>
+bool getFloatLevelSensorData(EncButton2<type, mode>&)
 {
     return data;
 }
 
-template <uint8_t mode>
-uint8_t updateFloatLevelSensorData(EncButton<mode>&)
+template <uint8_t type, uint8_t mode>
+uint8_t updateFloatLevelSensorData(EncButton2<type, mode>&)
 {
     isUpdatedFlag = true;
 

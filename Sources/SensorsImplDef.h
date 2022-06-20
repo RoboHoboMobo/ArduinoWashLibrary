@@ -4,20 +4,20 @@
  * Template functions implementation from SensorsImpl.h
  */
 
-template <uint8_t mode>
-bool getFloatLevelSensorData(EncButton<mode>& arduinoButton)
+template <uint8_t type, uint8_t mode>
+bool getFloatLevelSensorData(EncButton2<type, mode>& arduinoButton)
 {
-#if ARDUINO == 1
+#if ON_ARDUINO == 1
     return arduinoButton.hold();
 #endif
 
     return {};
 }
 
-template <uint8_t mode>
-uint8_t updateFloatLevelSensorData(EncButton<mode>& arduinoButton)
+template <uint8_t type, uint8_t mode>
+uint8_t updateFloatLevelSensorData(EncButton2<type, mode>& arduinoButton)
 {
-#if ARDUINO == 1
+#if ON_ARDUINO == 1
     return arduinoButton.tick();
 #endif
 
