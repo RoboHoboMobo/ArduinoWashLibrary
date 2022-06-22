@@ -15,9 +15,10 @@ public:
     Sensor* getLowerLevelSensor() override;
     Sensor* getUpperLevelSensor() override;
 
-    virtual bool isDrainable() override;
+    bool isDrainable() override;
+    bool isFillable() override;
 
-    virtual bool isFillable() override;
+    bool isNeedEmergencyPumping() override;
 
     void setStatus(Tank::Status);
     void setIsDrainable(bool flag);

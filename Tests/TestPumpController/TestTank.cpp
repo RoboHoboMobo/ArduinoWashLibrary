@@ -6,7 +6,6 @@ TestSensor s1{123};
 TestSensor s2{1};
 const uint8_t levelSensorsNum{3};
 Sensor* sensors[levelSensorsNum] = {&s0, &s1, &s2};
-Tank::Status status{};
 }
 
 Sensor* TestTank::getLevelSensor(uint8_t number)
@@ -72,4 +71,9 @@ bool TestTank::isDrainable()
 bool TestTank::isFillable()
 {
     return m_isFillable;
+}
+
+bool TestTank::isNeedEmergencyPumping()
+{
+    return {};
 }

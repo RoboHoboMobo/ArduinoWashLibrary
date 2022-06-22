@@ -22,6 +22,8 @@ public:
 
     Sensor* getUpperLevelSensor() override;
 
+    bool isNeedEmergencyPumping() override;
+
 private:
     static constexpr uint8_t m_levelSensorsNum{2};
     FloatLevelSensor m_lowerLevelSensor;

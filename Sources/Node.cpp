@@ -67,3 +67,8 @@ void Node::update()
     if (timer)
         timer->update();
 }
+
+bool Node::isNeedEmergencyPumping()
+{
+    return drain->isNeedEmergencyPumping();
+}
