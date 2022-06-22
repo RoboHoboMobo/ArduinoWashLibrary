@@ -8,7 +8,25 @@
 class PumpController
 {
 public:
-    PumpController(Node* node = nullptr);
+    /**
+     * @brief Режим работы насосов
+     */
+    enum Mode {
+       DefaultMode = 0,
+       NightMode
+    };
+
+    PumpController(Node* node = nullptr, Mode mode = DefaultMode);
+
+    /**
+     * @brief Выбрать режим работы насосов
+     */
+    void setMode(Mode mode);
+
+    /**
+     * @brief Возвращет текущий режим работы контроллера
+     */
+    Mode getCurrentMode() const;
 
     /**
      * @brief Вставить узел перед первым
@@ -50,7 +68,13 @@ public:
      */
     void update();
 
+    /**
+     * @brief Выключить все насосы
+     */
+    void switchPumpsOff();
+
 private:
+    Mode m_mode;
     Node* m_head;
     Node* m_tail;
 };

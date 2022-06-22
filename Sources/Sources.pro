@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        Controller.cpp \
         Node.cpp \
         PinImpl.cpp \
         Pump.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 HEADERS += \
     ArduinoButton.h \
     Common.h \
+    Controller.h \
     Node.h \
     PinImpl.h \
     Pump.h \
