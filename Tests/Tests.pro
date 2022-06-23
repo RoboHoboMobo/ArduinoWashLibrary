@@ -4,4 +4,6 @@ SUBDIRS += TestTimer \
     TestPump \
     TestFloatLevelSensor \
     TestTank \
-    TestPumpController
+    TestPumpController \
+    TestTankHelpers \
+    TestConcentrator
