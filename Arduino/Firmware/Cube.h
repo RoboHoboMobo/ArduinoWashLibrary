@@ -3,12 +3,14 @@
 #include "Tank.h"
 
 /**
- * @brief Класс тестового резервуара с двумя датчиками уровня
+ * @brief Класс куба
  */
-class TestTank : public Tank
+class Cube : public Tank
 {
 public:
-    TestTank(uint8_t lowerSensorPin, uint8_t upperSensorPin);
+    static constexpr uint8_t levelSensorsNum = 2;
+
+    Cube(const uint8_t (&floatLevelSensorsPins)[levelSensorsNum]);
 
     Sensor* getLevelSensor(uint8_t number) override;
 
@@ -22,10 +24,11 @@ public:
 
     Sensor* getUpperLevelSensor() override;
 
+    bool isNeedEmergencyPumping() override;
+
 private:
-    static constexpr uint8_t m_levelSensorsNum{2};
     FloatLevelSensor m_lowerLevelSensor;
     FloatLevelSensor m_upperLevelSensor;
 
-    Sensor* m_levelSensors[m_levelSensorsNum];
+    Sensor* m_levelSensors[levelSensorsNum];
 };

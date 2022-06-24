@@ -34,7 +34,7 @@ void TestConcentrator::testGetLevelSensor()
 {
     const uint8_t pins[] = {0, 123, 1, 2};
 
-    Concentrator c(pins);
+    Concentrator c({0, 123, 1, 2});
 
     Sensor* result = c.getLevelSensor(0);
 

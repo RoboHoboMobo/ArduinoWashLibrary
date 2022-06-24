@@ -2,7 +2,7 @@
 
 #include "TankHelpers.h"
 
-Concentrator::Concentrator(const uint8_t floatLevelSensorsPins[levelSensorsNum])
+Concentrator::Concentrator(const uint8_t (&floatLevelSensorsPins)[levelSensorsNum])
     : m_floatLevelSensor0(floatLevelSensorsPins[0])
     , m_floatLevelSensor1(floatLevelSensorsPins[1])
     , m_floatLevelSensor2(floatLevelSensorsPins[2])
@@ -72,7 +72,7 @@ Sensor* Concentrator::getUpperLevelSensor()
 
 bool Concentrator::isNeedEmergencyPumping()
 {
-    return getStatus() == Status::Empty;
+    return getLevelSensorsData() < 0b00000011; // < 50%
 }
 
 uint8_t Concentrator::getLevelSensorsData()

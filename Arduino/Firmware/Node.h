@@ -58,4 +58,9 @@ struct Node
      * @brief Обновить узел
      */
     void update();
+
+    /**
+     * @brief Возвращает флаг - нужна ли экстренная перекачка в резервуар-сток узла
+     */
+    bool isNeedEmergencyPumping();
 };

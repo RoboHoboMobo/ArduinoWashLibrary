@@ -2,14 +2,29 @@
 
 #include "PumpControllerHelpers.h"
 
-PumpController::PumpController(Node* node)
-    : m_head{node}
+PumpController::PumpController(Node* node, Mode mode)
+    : m_mode{mode}
+    , m_head{node}
     , m_tail{node}
 {
 }
 
+void PumpController::setMode(Mode mode)
+{
+    if (mode != m_mode)
+        m_mode = mode;
+}
+
+PumpController::Mode PumpController::getCurrentMode() const
+{
+    return m_mode;
+}
+
 void PumpController::pushFront(Node* node)
 {
+    if (!node)
+        return;
+
     if (!m_head && !m_tail)
     {
         m_tail = node;
@@ -32,6 +47,9 @@ void PumpController::pushFront(Node* node)
 
 void PumpController::pushBack(Node* node)
 {
+    if (!node)
+        return;
+
     if (!m_head && !m_tail)
     {
         m_tail = node;
@@ -54,6 +72,9 @@ void PumpController::pushBack(Node* node)
 
 void PumpController::popFront()
 {
+    if (!m_head)
+        return;
+
     m_head = m_head->next;
 
     m_head->prev = {};
@@ -61,6 +82,9 @@ void PumpController::popFront()
 
 void PumpController::popBack()
 {
+    if (!m_tail)
+        return;
+
     m_tail = m_tail->prev;
 
     m_tail->next = {};
@@ -83,10 +107,27 @@ Node* PumpController::back()
  */
 bool PumpController::operate(bool needReverse)
 {
-    if (needReverse)
-        return manageNodesReverse(m_tail);
+    if (!m_head || !m_tail)
+        return true;
 
-    return manageNodes(m_head);
+    switch (m_mode) {
+        case DefaultMode : {
+            if (needReverse)
+                return manageNodesReverse(m_tail);
+
+            return manageNodes(m_head);
+        }
+            break;
+
+        case NightMode : {
+            switchPumpsOff();
+
+            return true;
+        }
+            break;
+    }
+
+    return {};
 }
 
 void PumpController::update()
@@ -96,6 +137,19 @@ void PumpController::update()
     while (current) {
         current->update();
 
+        current = current->next;
+    }
+}
+
+void PumpController::switchPumpsOff()
+{
+    if (!m_head || !m_tail)
+        return;
+
+    Node* current = m_head->next; // Первый насос - ручной, поэтому начинаем со второго
+
+    while (current) {
+        current->off();
         current = current->next;
     }
 }

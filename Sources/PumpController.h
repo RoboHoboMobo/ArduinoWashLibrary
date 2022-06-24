@@ -69,7 +69,7 @@ public:
     void update();
 
     /**
-     * @brief Выключить все насосы
+     * @brief Выключить все насосы (кроме первого ручного)
      */
     void switchPumpsOff();
 

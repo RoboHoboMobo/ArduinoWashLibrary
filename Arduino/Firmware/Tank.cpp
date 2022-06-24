@@ -27,7 +27,11 @@ bool Tank::isFull()
 
 void Tank::update()
 {
-    uint8_t n = getLevelSensorsNum();
+    const uint8_t n = getLevelSensorsNum();
+
+    if (!n)
+        return;
+
     Sensor** sensors = getLevelSensors();
 
     for (uint8_t i = 0; i < n; ++i)

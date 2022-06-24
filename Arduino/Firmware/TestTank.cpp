@@ -57,3 +57,8 @@ Sensor* TestTank::getUpperLevelSensor()
 {
     return &m_upperLevelSensor;
 }
+
+bool TestTank::isNeedEmergencyPumping()
+{
+    return {};
+}

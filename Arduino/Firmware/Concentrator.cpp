@@ -1,8 +1,8 @@
-#include "Bio.h"
+#include "Concentrator.h"
 
 #include "TankHelpers.h"
 
-Bio::Bio(const uint8_t (&floatLevelSensorsPins)[levelSensorsNum])
+Concentrator::Concentrator(const uint8_t (&floatLevelSensorsPins)[levelSensorsNum])
     : m_floatLevelSensor0(floatLevelSensorsPins[0])
     , m_floatLevelSensor1(floatLevelSensorsPins[1])
     , m_floatLevelSensor2(floatLevelSensorsPins[2])
@@ -15,7 +15,7 @@ Bio::Bio(const uint8_t (&floatLevelSensorsPins)[levelSensorsNum])
     m_levelSensors[3] = &m_floatLevelSensor3;
 }
 
-Sensor* Bio::getLevelSensor(uint8_t number)
+Sensor* Concentrator::getLevelSensor(uint8_t number)
 {
     if (number >= levelSensorsNum)
         return {};
@@ -23,17 +23,17 @@ Sensor* Bio::getLevelSensor(uint8_t number)
     return m_levelSensors[number];
 }
 
-Sensor** Bio::getLevelSensors()
+Sensor** Concentrator::getLevelSensors()
 {
     return m_levelSensors;
 }
 
-uint8_t Bio::getLevelSensorsNum() const
+uint8_t Concentrator::getLevelSensorsNum() const
 {
     return levelSensorsNum;
 }
 
-Tank::Status Bio::getStatus()
+Tank::Status Concentrator::getStatus()
 {
     Status result{};
 
@@ -60,22 +60,23 @@ Tank::Status Bio::getStatus()
     return result;
 }
 
-Sensor* Bio::getLowerLevelSensor()
+Sensor* Concentrator::getLowerLevelSensor()
 {
     return m_levelSensors[0];
 }
 
-Sensor* Bio::getUpperLevelSensor()
+Sensor* Concentrator::getUpperLevelSensor()
 {
     return m_levelSensors[levelSensorsNum - 1];
 }
 
-bool Bio::isNeedEmergencyPumping()
+bool Concentrator::isNeedEmergencyPumping()
 {
-    return {};
+    return getStatus() == Status::Empty;
 }
 
-uint8_t Bio::getLevelSensorsData()
+uint8_t Concentrator::getLevelSensorsData()
 {
     return getFloatLevelSensorsDataMask(*this);
 }
+
