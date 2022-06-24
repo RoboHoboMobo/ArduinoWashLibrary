@@ -23,6 +23,10 @@ void MockPinImpl::reset()
     isOn = {};
 }
 
+void setPinMode(uint8_t, uint8_t)
+{
+}
+
 void switchPinOn(uint8_t p)
 {
     pin = p;

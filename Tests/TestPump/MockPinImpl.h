@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PinImpl.h"
+
 #include "Common.h"
 
 namespace MockPinImpl {
