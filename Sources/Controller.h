@@ -14,8 +14,7 @@ public:
         Error = 0xFF
     };
 
-    Controller(PumpController* pc, uint8_t errorLampPin,
-               uint8_t manualPumpPin, uint8_t bioRecirculationPin);
+    Controller(PumpController* pc, uint8_t errorLampPin, uint8_t bioRecirculationPin);
 
     /**
      * @brief Выбрать состояние системы
@@ -51,6 +50,5 @@ private:
     State m_state;
     PumpController* m_pc;
     const uint8_t m_errorLamp;
-    const uint8_t m_manualPump;
     const uint8_t m_bioRecirculation;
 };

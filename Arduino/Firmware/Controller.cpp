@@ -3,11 +3,10 @@
 #include "PinImpl.h"
 
 Controller::Controller(PumpController* pc, uint8_t errorLampPin,
-                       uint8_t manualPumpPin, uint8_t bioRecirculationPin)
+                       uint8_t bioRecirculationPin)
     : m_state{On}
     , m_pc{pc}
     , m_errorLamp{errorLampPin}
-    , m_manualPump{manualPumpPin}
     , m_bioRecirculation{bioRecirculationPin}
 {
 }
@@ -40,7 +39,7 @@ void Controller::operate()
             switchPinOff(m_errorLamp);
             switchPinOn(m_bioRecirculation);
 
-            const bool isManualPumpOn = readDigitalPin(m_manualPump);
+            const bool isManualPumpOn = m_pc->front()->pump->isOn();
 
             m_state = m_pc->operate(isManualPumpOn) ? On : Error;
         }

@@ -9,16 +9,17 @@
 /** Константы - номера пинов и т.д. **/
 
 // Пины управления и состояния системы
-const uint8_t errorAlarmLampPin = D13;   // Лампа ошибки
-const uint8_t resetErrorButtonPin = D12; // Кнопка сброса состояния ошибки 
-const uint8_t modePin = D11;             // Тумблер выбора режима (0 - стандартный режим, 1 - ночной режим)
+const uint8_t fakePin = NUM_DIGITAL_PINS; // Ненастоящий пин 
+const uint8_t errorAlarmLampPin = D13;    // Лампа ошибки
+const uint8_t resetErrorButtonPin = D12;  // Кнопка сброса состояния ошибки 
+const uint8_t modePin = D11;              // Тумблер выбора режима (0 - стандартный режим, 1 - ночной режим)
+const uint8_t manualPumpSwitchPin = D10;  // Проверка состояния (вкл/выкл) тумблера ручного насоса приямок->куб
 
 // Таймауты кнопок и тумблеров, мс (до 8 000)
 const int resetErrorButtonTimeout = 2000;
 const int modeSwitchTimeout = 200;
 
 // Пины насосов
-const uint8_t wellManualPumpPin = D10;      // Ручной насос приямок->куб
 const uint8_t cubePrimerPumpPin = D31;      // Насос куб->первак
 const uint8_t primerBioPumpPin = D32;       // Насос первак->био
 const uint8_t bioConcentratorPumpPin = D33; // Насос био->концентратор (накачка/рециркуляция)
@@ -65,7 +66,7 @@ Bio bio({bioFloatLevelSensorPin0, bioFloatLevelSensorPin1,
 Concentrator concentrator({concentratorFloatLevelSensorPin0, concentratorFloatLevelSensorPin1,
                            concentratorFloatLevelSensorPin2, concentratorFloatLevelSensorPin3}); // Концентратор
 
-Pump p01(wellManualPumpPin); // Ручной насос приямок->куб
+Pump p01(fakePin);           // Ручной насос приямок->куб
 Pump p12(cubePrimerPumpPin); // Насос куб->первак
 Pump p23(primerBioPumpPin);  // Насос первак->био         
 Pump p34(bioConcentratorPumpPin); // Насос био->концентратор
@@ -86,11 +87,12 @@ Node node3(&p34, &bio, &concentrator, &timer3);
 PumpController pc;
 
 // Контроллер системы
-Controller c(&pc, errorAlarmLampPin, wellManualPumpPin, bioRelayPin);
+Controller c(&pc, errorAlarmLampPin, bioRelayPin);
 
 void setup()
 {
   // Настраиваем пины управления, состояния
+  pinMode(manualPumpSwitchPin, INPUT); // Будем проверять тумблер ручного насоса
   pinMode(errorAlarmLampPin, OUTPUT);
 
   // Настраиваем кнопки и тумблеры
@@ -107,6 +109,11 @@ void setup()
 void loop()
 {
   c.update(); // Обновить узлы (показания датчиков, таймеры)
+
+  if (digitalRead(manualPumpSwitchPin)) // Читаем значения тумблера ручного насоса
+    p01.on();
+  else
+    p01.off(); 
 
   /** Управление состоянием системы **/
   if (c.getState() == Controller::Error && resetErrorButton.hold()) // Нажата кнопка сброса ошибки

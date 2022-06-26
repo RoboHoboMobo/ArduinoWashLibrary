@@ -131,7 +131,7 @@ void TestConcentrator::testIsNeedEmergencyPumpingIfEmpty()
 
     Concentrator c(pins);
 
-    MockSensors::setFloatLevelSensorsData({0, 0, 0, 0});
+    MockSensors::setFloatLevelSensorsData({1, 0, 0, 0});
 
     QVERIFY(c.isNeedEmergencyPumping());
 }
@@ -142,7 +142,7 @@ void TestConcentrator::testIsNeedEmergencyPumpingIfNotEmpty()
 
     Concentrator c(pins);
 
-    MockSensors::setFloatLevelSensorsData({1, 0, 0, 0});
+    MockSensors::setFloatLevelSensorsData({1, 1, 0, 0});
 
     QVERIFY(!c.isNeedEmergencyPumping());
 }
