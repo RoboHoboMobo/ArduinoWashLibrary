@@ -2,8 +2,16 @@
 
 #include "PinImpl.h"
 
+Pump::Pump()
+    : m_pin{}
+    , m_isManual{true}
+    , m_isOn{}
+{
+}
+
 Pump::Pump(uint8_t pin, bool isOn)
     : m_pin{pin}
+    , m_isManual{}
     , m_isOn{isOn}
 {
     setPinMode(pin, OUTPUT);
@@ -16,7 +24,9 @@ void Pump::on()
     if (m_isOn)
         return;
 
-    switchPinOn(m_pin);
+    if (!m_isManual)
+        switchPinOn(m_pin);
+
     m_isOn = true;
 }
 
@@ -25,7 +35,9 @@ void Pump::off()
     if (!m_isOn)
         return;
 
-    switchPinOff(m_pin);
+    if (!m_isManual)
+        switchPinOff(m_pin);
+
     m_isOn = false;
 }
 

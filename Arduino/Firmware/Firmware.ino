@@ -9,7 +9,6 @@
 /** Константы - номера пинов и т.д. **/
 
 // Пины управления и состояния системы
-const uint8_t fakePin = NUM_DIGITAL_PINS; // Ненастоящий пин 
 const uint8_t errorAlarmLampPin = D13;    // Лампа ошибки
 const uint8_t resetErrorButtonPin = D12;  // Кнопка сброса состояния ошибки 
 const uint8_t modePin = D11;              // Тумблер выбора режима (0 - стандартный режим, 1 - ночной режим)
@@ -66,7 +65,7 @@ Bio bio({bioFloatLevelSensorPin0, bioFloatLevelSensorPin1,
 Concentrator concentrator({concentratorFloatLevelSensorPin0, concentratorFloatLevelSensorPin1,
                            concentratorFloatLevelSensorPin2, concentratorFloatLevelSensorPin3}); // Концентратор
 
-Pump p01(fakePin);           // Ручной насос приямок->куб
+Pump p01;                    // Ручной насос приямок->куб
 Pump p12(cubePrimerPumpPin); // Насос куб->первак
 Pump p23(primerBioPumpPin);  // Насос первак->био         
 Pump p34(bioConcentratorPumpPin); // Насос био->концентратор

@@ -18,6 +18,9 @@ private slots:
     void switchFromOffToOn();
     void switchFromOnToOff();
     void switchFromOnToOn();
+
+    void switchOffManualPump();
+    void switchOnManualPump();
 };
 
 TestPump::TestPump()
@@ -98,6 +101,34 @@ void TestPump::switchFromOnToOn()
 
     QCOMPARE(MockPinImpl::getPin(), p.getPin());
     QVERIFY(MockPinImpl::getPinCurrentState());
+}
+
+void TestPump::switchOffManualPump()
+{
+    MockPinImpl::reset();
+
+    Pump p;
+
+    p.off();
+
+    QCOMPARE(p.getPin(), 0u);
+    QVERIFY(!p.isOn());
+
+    QVERIFY(!MockPinImpl::getPinCurrentState());
+}
+
+void TestPump::switchOnManualPump()
+{
+    MockPinImpl::reset();
+
+    Pump p;
+
+    p.on();
+
+    QCOMPARE(p.getPin(), 0u);
+    QVERIFY(p.isOn());
+
+    QVERIFY(!MockPinImpl::getPinCurrentState());
 }
 
 QTEST_APPLESS_MAIN(TestPump)
