@@ -94,6 +94,8 @@ void setup()
   pinMode(manualPumpSwitchPin, INPUT); // Будем проверять тумблер ручного насоса
   pinMode(errorAlarmLampPin, OUTPUT);
 
+  pinMode(bioRelayPin, OUTPUT); // Настраиваем пин для управления мотором (био -> концентратор)
+
   // Настраиваем кнопки и тумблеры
   resetErrorButton.setHoldTimeout(resetErrorButtonTimeout);
   modeSwitch.setHoldTimeout(modeSwitchTimeout);
