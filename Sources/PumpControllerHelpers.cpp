@@ -23,7 +23,7 @@ bool manageNodes(Node* head)
         if (currentState == Node::Error || nextState == Node::Error)
             return false;
 
-        if (next->isNeedEmergencyPumping()) {
+        if (next->isNeedEmergencyPumping() && !next->source->isEmpty()) {
             current->off();
             next->on();
         }
@@ -73,7 +73,7 @@ bool manageNodesReverse(Node* tail)
             continue;
         }
 
-        if (current->isNeedEmergencyPumping()) {
+        if (current->isNeedEmergencyPumping() && !current->source->isEmpty()) {
             prev->off();
             current->on();
         }
