@@ -24,15 +24,19 @@ bool manageNodes(Node* head)
             return false;
 
         if (next->isNeedEmergencyPumping() && !next->source->isEmpty()) {
-            current->off();
+            current->finish();
             next->on();
+
+            current = next;
+            next = current->next;
+
+            continue;
         }
-        else {
-            if (currentState == Node::WaterIsReady && next->canPumping())
-                next->on();
-            else
-                next->finish();
-        }
+
+        if (currentState == Node::WaterIsReady && next->canPumping())
+            next->on();
+        else
+            next->finish();
 
         current = next;
         next = current->next;
@@ -64,6 +68,16 @@ bool manageNodesReverse(Node* tail)
         if (currentState == Node::Error || prevState == Node::Error)
             return false;
 
+        if (current->isNeedEmergencyPumping() && !current->source->isEmpty()) {
+            prev->finish();
+            current->on();
+
+            current = prev;
+            prev = current->prev;
+
+            continue;
+        }
+
         if (current->next && current->next->getState() == Node::PumpOn) {
             current->finish();
 
@@ -73,16 +87,10 @@ bool manageNodesReverse(Node* tail)
             continue;
         }
 
-        if (current->isNeedEmergencyPumping() && !current->source->isEmpty()) {
-            prev->off();
+        if (prevState == Node::WaterIsReady && current->canPumping())
             current->on();
-        }
-        else {
-            if (prevState == Node::WaterIsReady && current->canPumping())
-                current->on();
-            else
-                current->finish();
-        }
+        else
+            current->finish();
 
         current = prev;
         prev = current->prev;
