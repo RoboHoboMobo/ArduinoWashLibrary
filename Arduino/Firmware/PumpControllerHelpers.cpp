@@ -99,7 +99,13 @@ bool manageNodesReverse(Node* tail)
         }
 
         if (current->next && current->next->getState() == Node::PumpOn) {
-            current->finish();
+            if (current->isLocked()) {
+                current->unlock();
+                current->finish();
+                current->lock();
+            }
+            else
+                current->finish();
 
             current = prev;
             prev = current->prev;

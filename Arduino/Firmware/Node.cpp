@@ -25,10 +25,8 @@ Node::State Node::getState() const
 
     if (!pump->isOn())
         return isDone ? WaterIsReady : PumpOff;
-    else
-        return isDone ? Error : PumpOn;
 
-    return Error;
+    return PumpOn;
 }
 
 bool Node::canPumping()
@@ -91,4 +89,9 @@ void Node::lock()
 void Node::unlock()
 {
     m_isLocked = false;
+}
+
+bool Node::isLocked() const
+{
+    return m_isLocked;
 }

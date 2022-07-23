@@ -95,19 +95,55 @@ Controller c(&pc, errorAlarmLampPin, bioRelayPin);
 
 void serialTestPrint()
 {
+  Serial.println("Таймеры");
+  Serial.print("Timer0 - Приямок->Куб: ");
   Serial.println(timer0.getRemainingTime());
+
+  Serial.print("Timer1 - Куб->Первак: ");
   Serial.println(timer1.getRemainingTime());
+
+  Serial.print("Timer2 - Первак->Био: ");
   Serial.println(timer2.getRemainingTime());
+
+  Serial.print("Timer3 - Био->Концентрат: ");
   Serial.println(timer3.getRemainingTime());
-  Serial.println("/////bio//////////////");
-  Serial.println(bio.getStatus());
-  Serial.println("//////conc//////////");
-  Serial.println(concentrator.getStatus());
-  Serial.println("////////primer///////////");
-  Serial.println(primer.getStatus());
-  Serial.println("////////cube/////////////");
-  Serial.println(cube.getStatus());
-  Serial.println("/////////////////////");
+
+  Serial.println("//////////////////////////////////");
+
+  Serial.println("Статус приямка: ");
+  Serial.print(well.getStatus());
+  
+  Serial.println("Статус куба: ");
+  Serial.print(cube.getStatus());
+  
+  Serial.println("Статус первака: ");
+  Serial.print(primer.getStatus());
+  
+  Serial.println("Статус био: ");
+  Serial.print(bio.getStatus());
+
+  Serial.println("Статус концентрата: ");
+  Serial.print(concentrator.getStatus());
+  
+  Serial.println("//////////////////////////////////");
+
+  Serial.println("Узел приямок->куб заблокирован: ");
+  Serial.print(node0.isLocked());
+  
+  Serial.println("Узел куб->первак заблокирован: ");
+  Serial.print(node1.isLocked());
+  
+  Serial.println("Узел первак->био заблокирован: ");
+  Serial.print(node2.isLocked());
+
+  Serial.println("Узел био->концентрат заблокирован: ");
+  Serial.print(node3.isLocked());
+
+  Serial.println();
+  Serial.println();
+  Serial.println();
+  Serial.println();
+  Serial.println();
 }
 
 void setup()
