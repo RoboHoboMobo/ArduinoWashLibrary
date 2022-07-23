@@ -110,34 +110,34 @@ void serialTestPrint()
 
   Serial.println("//////////////////////////////////");
 
-  Serial.println("Статус приямка: ");
-  Serial.print(well.getStatus());
+  Serial.print("Статус приямка: ");
+  Serial.println(well.getStatus());
   
-  Serial.println("Статус куба: ");
-  Serial.print(cube.getStatus());
+  Serial.print("Статус куба: ");
+  Serial.println(cube.getStatus());
   
-  Serial.println("Статус первака: ");
-  Serial.print(primer.getStatus());
+  Serial.print("Статус первака: ");
+  Serial.println(primer.getStatus());
   
-  Serial.println("Статус био: ");
-  Serial.print(bio.getStatus());
+  Serial.print("Статус био: ");
+  Serial.println(bio.getStatus());
 
-  Serial.println("Статус концентрата: ");
-  Serial.print(concentrator.getStatus());
+  Serial.print("Статус концентрата: ");
+  Serial.println(concentrator.getStatus());
   
   Serial.println("//////////////////////////////////");
 
-  Serial.println("Узел приямок->куб заблокирован: ");
-  Serial.print(node0.isLocked());
+  Serial.print("Узел приямок->куб заблокирован: ");
+  Serial.println(node0.isLocked());
   
-  Serial.println("Узел куб->первак заблокирован: ");
-  Serial.print(node1.isLocked());
+  Serial.print("Узел куб->первак заблокирован: ");
+  Serial.println(node1.isLocked());
   
-  Serial.println("Узел первак->био заблокирован: ");
-  Serial.print(node2.isLocked());
+  Serial.print("Узел первак->био заблокирован: ");
+  Serial.println(node2.isLocked());
 
-  Serial.println("Узел био->концентрат заблокирован: ");
-  Serial.print(node3.isLocked());
+  Serial.print("Узел био->концентрат заблокирован: ");
+  Serial.println(node3.isLocked());
 
   Serial.println();
   Serial.println();
