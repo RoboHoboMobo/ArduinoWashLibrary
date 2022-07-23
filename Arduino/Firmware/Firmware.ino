@@ -20,8 +20,8 @@ const int modeSwitchTimeout = 200;
 
 // Пины насосов
 const uint8_t cubePrimerPumpPin = D31;      // Насос куб->первак
-const uint8_t primerBioPumpPin = D32;       // Насос первак->био
-const uint8_t bioConcentratorPumpPin = D33; // Насос био->концентратор (накачка/рециркуляция)
+const uint8_t primerBioPumpPin = D33;       // Насос первак->био
+const uint8_t bioConcentratorPumpPin = D39; // Насос био->концентратор (накачка/рециркуляция)
 
 const uint8_t bioRelayPin = D34; // Реле насоса био
 
@@ -43,9 +43,14 @@ const uint8_t concentratorFloatLevelSensorPin2 = D37;   // Датчик уров
 const uint8_t concentratorFloatLevelSensorPin3 = D38;   // Датчик уровня в концентраторе 100% (верхний)
 
 // Значения таймеров (мс)
-const uint32_t wellManualPumpTimer = 10 * 60 * 1000;
-const uint32_t cubePrimerPumpTimer = 20 * 60 * 1000;
-const uint32_t primerBioPumpTimer  = 60 * 60 * 1000;
+//const uint32_t wellManualPumpTimer = 600000;
+//const uint32_t cubePrimerPumpTimer = 1200000;
+//const uint32_t primerBioPumpTimer  = 3600000;
+//const uint32_t bioConcentratorPumpTimer = 0;
+
+const uint32_t wellManualPumpTimer = 120000;
+const uint32_t cubePrimerPumpTimer = 240000;
+const uint32_t primerBioPumpTimer  = 3600000;
 const uint32_t bioConcentratorPumpTimer = 0;
 
 /** Переменные - кнопки, насосы, резервуары и т.д. **/
@@ -88,8 +93,26 @@ PumpController pc;
 // Контроллер системы
 Controller c(&pc, errorAlarmLampPin, bioRelayPin);
 
+void serialTestPrint()
+{
+  Serial.println(timer0.getRemainingTime());
+  Serial.println(timer1.getRemainingTime());
+  Serial.println(timer2.getRemainingTime());
+  Serial.println(timer3.getRemainingTime());
+  Serial.println("/////bio//////////////");
+  Serial.println(bio.getStatus());
+  Serial.println("//////conc//////////");
+  Serial.println(concentrator.getStatus());
+  Serial.println("////////primer///////////");
+  Serial.println(primer.getStatus());
+  Serial.println("////////cube/////////////");
+  Serial.println(cube.getStatus());
+  Serial.println("/////////////////////");
+}
+
 void setup()
 {
+   Serial.begin(9600);
   // Настраиваем пины управления, состояния
   pinMode(manualPumpSwitchPin, INPUT); // Будем проверять тумблер ручного насоса
   pinMode(errorAlarmLampPin, OUTPUT);
@@ -114,7 +137,7 @@ void loop()
   if (digitalRead(manualPumpSwitchPin)) // Читаем значения тумблера ручного насоса
     node0.on();
   else
-    node0.off(); 
+    node0.off();
 
   /** Управление состоянием системы **/
   if (c.getState() == Controller::Error && resetErrorButton.hold()) // Нажата кнопка сброса ошибки
@@ -127,4 +150,6 @@ void loop()
     c.setMode(PumpController::DefaultMode);
 
   c.operate(); // Управление системой
+
+  serialTestPrint(); // Вывести данные таймеров в serial
 }
