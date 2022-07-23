@@ -7,6 +7,7 @@ Node::Node(Pump* pump, Tank* source, Tank* drain, Timer* timer, Node* prev, Node
     , timer{timer}
     , prev{prev}
     , next{next}
+    , m_isLocked{}
 {
 #if ON_ARDUINO == 0
     assert(pump);
@@ -37,6 +38,9 @@ bool Node::canPumping()
 
 void Node::on()
 {
+    if (m_isLocked)
+        return;
+
     pump->on();
 
     if (timer)
@@ -45,6 +49,9 @@ void Node::on()
 
 void Node::finish()
 {
+    if (m_isLocked)
+        return;
+
     pump->off();
 
     if (timer)
@@ -53,6 +60,9 @@ void Node::finish()
 
 void Node::off()
 {
+    if (m_isLocked)
+        return;
+
     pump->off();
 
     if (timer)
@@ -71,4 +81,14 @@ void Node::update()
 bool Node::isNeedEmergencyPumping()
 {
     return drain->isNeedEmergencyPumping();
+}
+
+void Node::lock()
+{
+    m_isLocked = true;
+}
+
+void Node::unlock()
+{
+    m_isLocked = false;
 }
