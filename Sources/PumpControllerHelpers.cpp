@@ -25,7 +25,13 @@ bool manageNodes(Node* head)
 
         if (next->isNeedEmergencyPumping()) {
             if (next->source->isDrainable()) {
-                current->finish();
+                if (current->isLocked()) {
+                    current->unlock();
+                    current->finish();
+                    current->lock();
+                }
+                else
+                    current->finish();
 
                 next->on();
                 next->lock();
