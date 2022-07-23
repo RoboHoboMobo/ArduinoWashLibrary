@@ -137,7 +137,7 @@ void loop()
   if (digitalRead(manualPumpSwitchPin)) // Читаем значения тумблера ручного насоса
     node0.on();
   else
-    node0.off();
+    node0.finish();
 
   /** Управление состоянием системы **/
   if (c.getState() == Controller::Error && resetErrorButton.hold()) // Нажата кнопка сброса ошибки
