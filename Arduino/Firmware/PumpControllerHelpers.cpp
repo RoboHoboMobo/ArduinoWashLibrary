@@ -24,14 +24,30 @@ bool manageNodes(Node* head)
             return false;
 
         if (next->isNeedEmergencyPumping()) {
-            current->off();
+            if (next->source->isDrainable()) {
+                current->finish();
+
+                next->on();
+                next->lock();
+
+                current = next;
+                next = current->next;
+
+                continue;
+            }
+            else {
+                next->unlock();
+                next->finish();
+            }
+        }
+
+        if (currentState == Node::WaterIsReady && next->canPumping()) {
             next->on();
+            next->lock();
         }
         else {
-            if (currentState == Node::WaterIsReady && next->canPumping())
-                next->on();
-            else
-                next->finish();
+            next->unlock();
+            next->finish();
         }
 
         current = next;
@@ -64,6 +80,24 @@ bool manageNodesReverse(Node* tail)
         if (currentState == Node::Error || prevState == Node::Error)
             return false;
 
+        if (current->isNeedEmergencyPumping()) {
+            if (current->source->isDrainable()) {
+                prev->finish();
+
+                current->on();
+                current->lock();
+
+                current = prev;
+                prev = current->prev;
+
+                continue;
+            }
+            else {
+                current->unlock();
+                current->finish();
+            }
+        }
+
         if (current->next && current->next->getState() == Node::PumpOn) {
             current->finish();
 
@@ -73,15 +107,13 @@ bool manageNodesReverse(Node* tail)
             continue;
         }
 
-        if (current->isNeedEmergencyPumping()) {
-            prev->off();
+        if (current->canPumping() && prevState == Node::WaterIsReady) {
             current->on();
+            current->lock();
         }
         else {
-            if (prevState == Node::WaterIsReady && current->canPumping())
-                current->on();
-            else
-                current->finish();
+            current->unlock();
+            current->finish();
         }
 
         current = prev;

@@ -72,7 +72,7 @@ Sensor* Concentrator::getUpperLevelSensor()
 
 bool Concentrator::isNeedEmergencyPumping()
 {
-    return getStatus() == Status::Empty;
+    return getLevelSensorsData() < 0b00000011; // < 50%
 }
 
 uint8_t Concentrator::getLevelSensorsData()
