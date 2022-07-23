@@ -112,9 +112,9 @@ void loop()
   c.update(); // Обновить узлы (показания датчиков, таймеры)
 
   if (digitalRead(manualPumpSwitchPin)) // Читаем значения тумблера ручного насоса
-    p01.on();
+    node0.on();
   else
-    p01.off(); 
+    node0.off(); 
 
   /** Управление состоянием системы **/
   if (c.getState() == Controller::Error && resetErrorButton.hold()) // Нажата кнопка сброса ошибки
