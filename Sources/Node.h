@@ -74,6 +74,8 @@ struct Node
      */
     void unlock();
 
+    bool isLocked() const;
+
 private:
     bool m_isLocked;
 };
