@@ -39,9 +39,7 @@ void Controller::operate()
             switchPinOff(m_errorLamp);
             switchPinOn(m_bioRecirculation);
 
-            const bool isManualPumpOn = m_pc->front()->pump->isOn();
-
-            m_state = m_pc->operate(isManualPumpOn) ? On : Error;
+            m_state = m_pc->operate() ? On : Error;
         }
         break;
 
