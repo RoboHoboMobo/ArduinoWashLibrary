@@ -63,4 +63,17 @@ struct Node
      * @brief Возвращает флаг - нужна ли экстренная перекачка в резервуар-сток узла
      */
     bool isNeedEmergencyPumping();
+
+    /**
+     * @brief Заблокировать узел для дальнейших изменений
+     */
+    void lock();
+
+    /**
+     * @brief Разблокировать узел
+     */
+    void unlock();
+
+private:
+    bool m_isLocked;
 };

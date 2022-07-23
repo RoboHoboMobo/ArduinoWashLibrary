@@ -63,6 +63,11 @@ void TestTank::setIsFillable(bool flag)
     m_isFillable = flag;
 }
 
+void TestTank::setIsNeedEmergencyPumping(bool flag)
+{
+    m_isNeedEmergencyPumping = flag;
+}
+
 bool TestTank::isDrainable()
 {
     return m_isDrainable;
@@ -75,5 +80,5 @@ bool TestTank::isFillable()
 
 bool TestTank::isNeedEmergencyPumping()
 {
-    return {};
+    return m_isNeedEmergencyPumping;
 }
