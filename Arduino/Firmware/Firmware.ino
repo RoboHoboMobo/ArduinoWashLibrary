@@ -124,6 +124,21 @@ void serialTestPrint()
 
   Serial.print("Статус концентрата: ");
   Serial.println(concentrator.getStatus());
+
+  Serial.println("//////////////////////////////////");
+
+  Serial.print("Узел приямок->куб может качать: ");
+  Serial.println(node0.canPumping());
+
+  Serial.print("Узел куб->первак может качать: ");
+  Serial.println(node1.canPumping());
+  
+  Serial.print("Узел первак->био может качать: ");
+  Serial.println(node2.canPumping());
+
+  Serial.print("Узел био->концентрат может качать: ");
+  Serial.println(node3.canPumping());
+
   
   Serial.println("//////////////////////////////////");
 
