@@ -7,11 +7,26 @@
  */
 bool manageNodes(Node* head, size_t nodesNum)
 {
-    if (!head)
+    if (!head || nodesNum == 1)
         return true;
 
-    if (nodesNum < 3) // TODO: Отдельный алгоритм для двух узлов
+    if (nodesNum == 2) {
+        Node* current = head;
+        Node* next = current->next;
+
+        if (current->getState() == Node::Error || next->getState() == Node::Error)
+            return false;
+
+        const bool isNextPumpingAvailable = next->canPumping() &&
+                current->getState() == Node::WaterIsReady;
+
+        isNextPumpingAvailable ? next->on() : next->finish();
+
+        if (next->isNeedEmergencyPumping() && next->canPumping())
+            next->on();
+
         return true;
+    }
 
     Node* prev = head;
     Node* current = head->next; // Начинаем со второго узла
@@ -22,22 +37,20 @@ bool manageNodes(Node* head, size_t nodesNum)
         current->update();
         next->update();
 
-        const bool canNextPumping = next->canPumping() &&
+        if (current->getState() == Node::Error || next->getState() == Node::Error)
+            return false;
+
+        const bool isNextPumpingAvailable = next->canPumping() &&
                 current->getState() == Node::WaterIsReady;
 
-        if (canNextPumping)
-            next->on();
-        else
-            next->finish();
+        isNextPumpingAvailable ? next->on() : next->finish();
 
-        const bool canCurrentPumping =  current->canPumping() &&
+        const bool isCurrentPumpingAvailable =  current->canPumping() &&
                 prev->getState() == Node::WaterIsReady;
 
         if (!current->isNeedEmergencyPumping()) {
-            if (canCurrentPumping && next->getState() != Node::PumpOn)
-                current->on();
-            else
-                current->finish();
+            isCurrentPumpingAvailable && next->getState() != Node::PumpOn ?
+                        current->on() : current->finish();
         }
 
         if (next->isNeedEmergencyPumping() && next->canPumping())
@@ -45,78 +58,6 @@ bool manageNodes(Node* head, size_t nodesNum)
 
         current = next;
         next = current->next;
-        prev = current->prev;
-    }
-
-    return true;
-}
-
-/**
- * @param tail Последний узел системы (концентратор)
- *
- * @return Флаг успешного выполнения
- */
-bool manageNodesReverse(Node* tail)
-{
-    if (!tail)
-        return true;
-
-    Node* current = tail;
-    Node* prev = current->prev;
-
-    while (prev) {
-        current->update();
-        prev->update();
-
-        Node::State currentState = current->getState();
-        Node::State prevState = prev->getState();
-
-        if (currentState == Node::Error || prevState == Node::Error)
-            return false;
-
-        if (current->isNeedEmergencyPumping()) {
-            if (current->source->isDrainable()) {
-                prev->finish();
-
-                current->on();
-                current->lock();
-
-                current = prev;
-                prev = current->prev;
-
-                continue;
-            }
-            else {
-                current->unlock();
-                current->finish();
-            }
-        }
-
-        if (current->next && current->next->getState() == Node::PumpOn) {
-            if (current->isLocked()) {
-                current->unlock();
-                current->finish();
-                current->lock();
-            }
-            else
-                current->finish();
-
-            current = prev;
-            prev = current->prev;
-
-            continue;
-        }
-
-        if (current->canPumping() && prevState == Node::WaterIsReady) {
-            current->on();
-            current->lock();
-        }
-        else {
-            current->unlock();
-            current->finish();
-        }
-
-        current = prev;
         prev = current->prev;
     }
 
