@@ -6,7 +6,10 @@ PumpController::PumpController(Node* node, Mode mode)
     : m_mode{mode}
     , m_head{node}
     , m_tail{node}
+    , m_size{}
 {
+    if (m_head)
+        ++m_size;
 }
 
 void PumpController::setMode(Mode mode)
@@ -24,6 +27,8 @@ void PumpController::pushFront(Node* node)
 {
     if (!node)
         return;
+
+    ++m_size;
 
     if (!m_head && !m_tail)
     {
@@ -50,6 +55,8 @@ void PumpController::pushBack(Node* node)
     if (!node)
         return;
 
+    ++m_size;
+
     if (!m_head && !m_tail)
     {
         m_tail = node;
@@ -75,6 +82,8 @@ void PumpController::popFront()
     if (!m_head)
         return;
 
+    --m_size;
+
     m_head = m_head->next;
 
     m_head->prev = {};
@@ -84,6 +93,8 @@ void PumpController::popBack()
 {
     if (!m_tail)
         return;
+
+    --m_size;
 
     m_tail = m_tail->prev;
 
@@ -112,10 +123,10 @@ bool PumpController::operate(bool needReverse)
 
     switch (m_mode) {
         case DefaultMode : {
-            if (needReverse)
-                return manageNodesReverse(m_tail);
+            // if (needReverse)
+            //     return manageNodesReverse(m_tail);
 
-            return manageNodes(m_head);
+            return manageNodes(m_head, m_size);
         }
             break;
 
@@ -152,4 +163,9 @@ void PumpController::switchPumpsOff()
         current->off();
         current = current->next;
     }
+}
+
+size_t PumpController::size() const
+{
+    return m_size;
 }
