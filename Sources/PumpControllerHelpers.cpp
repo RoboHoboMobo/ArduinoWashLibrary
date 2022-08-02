@@ -5,130 +5,59 @@
  *
  * @return Флаг успешного выполнения
  */
-bool manageNodes(Node* head)
+bool manageNodes(Node* head, size_t nodesNum)
 {
-    if (!head)
+    if (!head || nodesNum == 1)
         return true;
 
-    Node* current = head;
+    if (nodesNum == 2) {
+        Node* current = head;
+        Node* next = current->next;
+
+        if (current->getState() == Node::Error || next->getState() == Node::Error)
+            return false;
+
+        const bool isNextPumpingAvailable = next->canPumping() &&
+                current->getState() == Node::WaterIsReady;
+
+        isNextPumpingAvailable ? next->on() : next->finish();
+
+        if (next->isNeedEmergencyPumping() && next->canPumping())
+            next->on();
+
+        return true;
+    }
+
+    Node* prev = head;
+    Node* current = head->next; // Начинаем со второго узла
     Node* next = current->next;
 
     while (next) {
+        prev->update();
         current->update();
         next->update();
 
-        Node::State currentState = current->getState();
-        Node::State nextState = next->getState();
-
-        if (currentState == Node::Error || nextState == Node::Error)
+        if (current->getState() == Node::Error || next->getState() == Node::Error)
             return false;
 
-        if (next->isNeedEmergencyPumping()) {
-            if (next->source->isDrainable()) {
-                if (current->isLocked()) {
-                    current->unlock();
-                    current->finish();
-                    current->lock();
-                }
-                else
-                    current->finish();
+        const bool isNextPumpingAvailable = next->canPumping() &&
+                current->getState() == Node::WaterIsReady;
 
-                next->on();
-                next->lock();
+        isNextPumpingAvailable ? next->on() : next->finish();
 
-                current = next;
-                next = current->next;
+        const bool isCurrentPumpingAvailable =  current->canPumping() &&
+                prev->getState() == Node::WaterIsReady;
 
-                continue;
-            }
-            else {
-                next->unlock();
-                next->finish();
-            }
+        if (!current->isNeedEmergencyPumping()) {
+            isCurrentPumpingAvailable && next->getState() != Node::PumpOn ?
+                        current->on() : current->finish();
         }
 
-        if (currentState == Node::WaterIsReady && next->canPumping()) {
+        if (next->isNeedEmergencyPumping() && next->canPumping())
             next->on();
-            next->lock();
-        }
-        else {
-            next->unlock();
-            next->finish();
-        }
 
         current = next;
         next = current->next;
-    }
-
-    return true;
-}
-
-/**
- * @param tail Последний узел системы (концентратор)
- *
- * @return Флаг успешного выполнения
- */
-bool manageNodesReverse(Node* tail)
-{
-    if (!tail)
-        return true;
-
-    Node* current = tail;
-    Node* prev = current->prev;
-
-    while (prev) {
-        current->update();
-        prev->update();
-
-        Node::State currentState = current->getState();
-        Node::State prevState = prev->getState();
-
-        if (currentState == Node::Error || prevState == Node::Error)
-            return false;
-
-        if (current->isNeedEmergencyPumping()) {
-            if (current->source->isDrainable()) {
-                prev->finish();
-
-                current->on();
-                current->lock();
-
-                current = prev;
-                prev = current->prev;
-
-                continue;
-            }
-            else {
-                current->unlock();
-                current->finish();
-            }
-        }
-
-        if (current->next && current->next->getState() == Node::PumpOn) {
-            if (current->isLocked()) {
-                current->unlock();
-                current->finish();
-                current->lock();
-            }
-            else
-                current->finish();
-
-            current = prev;
-            prev = current->prev;
-
-            continue;
-        }
-
-        if (current->canPumping() && prevState == Node::WaterIsReady) {
-            current->on();
-            current->lock();
-        }
-        else {
-            current->unlock();
-            current->finish();
-        }
-
-        current = prev;
         prev = current->prev;
     }
 
