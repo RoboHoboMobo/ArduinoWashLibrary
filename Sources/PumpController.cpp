@@ -123,9 +123,6 @@ bool PumpController::operate(bool needReverse)
 
     switch (m_mode) {
         case DefaultMode : {
-            // if (needReverse)
-            //     return manageNodesReverse(m_tail);
-
             return manageNodes(m_head, m_size);
         }
             break;
