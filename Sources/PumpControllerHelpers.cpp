@@ -5,59 +5,47 @@
  *
  * @return Флаг успешного выполнения
  */
-bool manageNodes(Node* head)
+bool manageNodes(Node* head, size_t nodesNum)
 {
     if (!head)
         return true;
 
-    Node* current = head;
+    if (nodesNum < 3) // TODO: Отдельный алгоритм для двух узлов
+        return true;
+
+    Node* prev = head;
+    Node* current = head->next; // Начинаем со второго узла
     Node* next = current->next;
 
     while (next) {
+        prev->update();
         current->update();
         next->update();
 
-        Node::State currentState = current->getState();
-        Node::State nextState = next->getState();
+        const bool canNextPumping = next->canPumping() &&
+                current->getState() == Node::WaterIsReady;
 
-        if (currentState == Node::Error || nextState == Node::Error)
-            return false;
-
-        if (next->isNeedEmergencyPumping()) {
-            if (next->source->isDrainable()) {
-                if (current->isLocked()) {
-                    current->unlock();
-                    current->finish();
-                    current->lock();
-                }
-                else
-                    current->finish();
-
-                next->on();
-                next->lock();
-
-                current = next;
-                next = current->next;
-
-                continue;
-            }
-            else {
-                next->unlock();
-                next->finish();
-            }
-        }
-
-        if (currentState == Node::WaterIsReady && next->canPumping()) {
+        if (canNextPumping)
             next->on();
-            next->lock();
-        }
-        else {
-            next->unlock();
+        else
             next->finish();
+
+        const bool canCurrentPumping =  current->canPumping() &&
+                prev->getState() == Node::WaterIsReady;
+
+        if (!current->isNeedEmergencyPumping()) {
+            if (canCurrentPumping && next->getState() != Node::PumpOn)
+                current->on();
+            else
+                current->finish();
         }
+
+        if (next->isNeedEmergencyPumping() && next->canPumping())
+            next->on();
 
         current = next;
         next = current->next;
+        prev = current->prev;
     }
 
     return true;

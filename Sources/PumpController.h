@@ -2,6 +2,8 @@
 
 #include "Node.h"
 
+#include <stddef.h>
+
 /**
  * @brief Класс контроллера логики работы насосов (связаный список)
  */
@@ -73,8 +75,14 @@ public:
      */
     void switchPumpsOff();
 
+    /**
+     * @brief Вернуть количество узлов
+     */
+    size_t size() const;
+
 private:
     Mode m_mode;
     Node* m_head;
     Node* m_tail;
+    size_t m_size;
 };
