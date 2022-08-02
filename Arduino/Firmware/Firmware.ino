@@ -139,21 +139,6 @@ void serialTestPrint()
   Serial.print("Узел био->концентрат может качать: ");
   Serial.println(node3.canPumping());
 
-  
-  Serial.println("//////////////////////////////////");
-
-  Serial.print("Узел приямок->куб заблокирован: ");
-  Serial.println(node0.isLocked());
-  
-  Serial.print("Узел куб->первак заблокирован: ");
-  Serial.println(node1.isLocked());
-  
-  Serial.print("Узел первак->био заблокирован: ");
-  Serial.println(node2.isLocked());
-
-  Serial.print("Узел био->концентрат заблокирован: ");
-  Serial.println(node3.isLocked());
-
   Serial.println();
   Serial.println();
   Serial.println();
@@ -185,16 +170,10 @@ void loop()
 {
   c.update(); // Обновить узлы (показания датчиков, таймеры)
 
-  if (digitalRead(manualPumpSwitchPin)) { // Читаем значения тумблера ручного насоса
-    node0.unlock();
+  if (digitalRead(manualPumpSwitchPin)) // Читаем значения тумблера ручного насоса
     node0.on();
-    node0.lock();
-  }
-  else {
-    node0.unlock();
+  else
     node0.finish();
-    node0.lock();
-  }
 
   /** Управление состоянием системы **/
   if (c.getState() == Controller::Error && resetErrorButton.hold()) // Нажата кнопка сброса ошибки
